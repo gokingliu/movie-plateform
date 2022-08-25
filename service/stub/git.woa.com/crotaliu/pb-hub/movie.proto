@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package trpc.moviePlay.operation;
+
+option go_package="git.woa.com/crotaliu/pb-hub";
+
+/* 注册服务 */
+// 用户服务
+service User {
+  // 用户注册
+  rpc Register(RegisterReq) returns (RegisterRsp) {}
+  // 检查用户名重复
+  rpc CheckUserName(CheckUserNameReq) returns (CheckUserNameRsp) {}
+  // 用户登录
+  rpc Login(LoginReq) returns (LoginRsp) {}
+}
+
+
+// 视频列表
+service List {
+  // 获取视频列表
+  rpc GetList(GetListReq) returns (GetListRsp) {}
+}
+
+/* 请求参数 */
+// 用户注册 请求参数
+message RegisterReq {
+  string userName = 1; // 用户名
+  string password = 2; // 密码
+}
+
+// 检查用户名重复 请求参数
+message CheckUserNameReq {
+  string userName = 1; // 用户名
+}
+
+// 用户登录 请求参数
+message LoginReq {
+  string userName = 1; // 用户名
+  string password = 2; // 密码
+}
+
+// 获取视频列表 请求参数
+message GetListReq {
+  string          mName        = 1; // 电影名
+  repeated uint32 mTypeID      = 2; // 电影类型ID
+  repeated uint32 mCountryID   = 3; // 电影制片国家/地区ID
+  repeated uint32 mLanguageID  = 4; // 电影语言ID
+  repeated uint32 mDateYearID  = 5; // 电影上映年份ID
+  uint32          mDoubanScore = 6; // 豆瓣评分
+  int32           pageNo       = 7; // 页码
+  int32           pageSize     = 8; // 容量
+}
+
+/* 响应参数 */
+// 用户注册 响应参数
+message RegisterRsp {
+  int32  code   = 1; // 返回码
+  string msg    = 2; // 返回信息
+  bool   result = 3; // 返回结果，false-登录失败 true-登录成功
+}
+
+// 检查用户名重复 响应参数
+message CheckUserNameRsp {
+  int32  code   = 1; // 返回码
+  string msg    = 2; // 返回信息
+  bool   result = 3; // 返回结果，false-不重复 true-重复
+}
+
+// 用户登录 响应参数
+message LoginRsp {
+  message Result {
+    string token     = 1; // 用户 token
+    int64  loginTime = 2; // 登录时间
+  }
+  int32       code   = 1; // 返回码
+  string      msg    = 2; // 返回信息
+  Result      result = 3; // 返回结果
+}
+
+// 获取视频列表 响应参数
+message GetListRsp {
+  message List {
+    uint32 mid           = 1; // 电影ID
+    string mUrl          = 2; // 电影URL
+    string mName         = 3; // 电影名
+    string mPoster       = 4; // 电影海报
+    string mTypeName     = 5; // 电影类型
+    string mDoubanScore  = 6; // 豆瓣评分
+    string mDirector     = 7; // 电影导演
+    string mStarring     = 8; // 电影主演
+    string mCountryName  = 9; // 电影制片国家/地区
+    string mLanguageName = 10; // 电影语言
+    uint32 mDate         = 11; // 电影上映日期
+    uint32 mViews        = 12; // 电影播放量
+    uint32 mLikes        = 13; // 电影点赞量
+    uint32 mCollects     = 14; // 电影收藏量
+    uint32 createTime    = 15; // 创建时间
+    uint32 updateTime    = 16; // 更新时间
+  }
+  message Result {
+    int64         count  = 1; // 总量
+    repeated List list   = 2; // 列表
+  }
+  int32           code   = 1; // 返回码
+  string          msg    = 2; // 返回信息
+  Result          result = 3; // 返回结果
+}
