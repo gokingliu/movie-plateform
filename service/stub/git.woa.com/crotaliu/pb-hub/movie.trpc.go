@@ -92,19 +92,19 @@ func UserService_Login_Handler(svr interface{}, ctx context.Context, f server.Fi
 
 // UserServer_ServiceDesc descriptor for server.RegisterService
 var UserServer_ServiceDesc = server.ServiceDesc{
-	ServiceName: "trpc.moviePlay.operation.User",
+	ServiceName: "trpc.MovieService.operation.User",
 	HandlerType: ((*UserService)(nil)),
 	Methods: []server.Method{
 		{
-			Name: "/trpc.moviePlay.operation.User/Register",
+			Name: "/trpc.MovieService.operation.User/Register",
 			Func: UserService_Register_Handler,
 		},
 		{
-			Name: "/trpc.moviePlay.operation.User/CheckUserName",
+			Name: "/trpc.MovieService.operation.User/CheckUserName",
 			Func: UserService_CheckUserName_Handler,
 		},
 		{
-			Name: "/trpc.moviePlay.operation.User/Login",
+			Name: "/trpc.MovieService.operation.User/Login",
 			Func: UserService_Login_Handler,
 		},
 	},
@@ -123,6 +123,9 @@ type ListService interface {
 
 	// GetList 获取视频列表
 	GetList(ctx context.Context, req *GetListReq, rsp *GetListRsp) (err error)
+
+	// GetLeaderboard 获取视频排行榜
+	GetLeaderboard(ctx context.Context, req *GetLeaderboardReq, rsp *GetLeaderboardRsp) (err error)
 }
 
 func ListService_GetList_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
@@ -145,14 +148,38 @@ func ListService_GetList_Handler(svr interface{}, ctx context.Context, f server.
 	return rsp, nil
 }
 
+func ListService_GetLeaderboard_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &GetLeaderboardReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(ListService).GetLeaderboard(ctx, reqbody.(*GetLeaderboardReq), rspbody.(*GetLeaderboardRsp))
+	}
+
+	rsp := &GetLeaderboardRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
 // ListServer_ServiceDesc descriptor for server.RegisterService
 var ListServer_ServiceDesc = server.ServiceDesc{
-	ServiceName: "trpc.moviePlay.operation.List",
+	ServiceName: "trpc.MovieService.operation.List",
 	HandlerType: ((*ListService)(nil)),
 	Methods: []server.Method{
 		{
-			Name: "/trpc.moviePlay.operation.List/GetList",
+			Name: "/trpc.MovieService.operation.List/GetList",
 			Func: ListService_GetList_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.List/GetLeaderboard",
+			Func: ListService_GetLeaderboard_Handler,
 		},
 	},
 }
@@ -161,6 +188,53 @@ var ListServer_ServiceDesc = server.ServiceDesc{
 func RegisterListService(s server.Service, svr ListService) {
 	if err := s.Register(&ListServer_ServiceDesc, svr); err != nil {
 		panic(fmt.Sprintf("List register error:%v", err))
+	}
+
+}
+
+// InfoService defines service
+type InfoService interface {
+
+	// GetInfo 获取视频详情
+	GetInfo(ctx context.Context, req *GetInfoReq, rsp *GetInfoRsp) (err error)
+}
+
+func InfoService_GetInfo_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &GetInfoReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(InfoService).GetInfo(ctx, reqbody.(*GetInfoReq), rspbody.(*GetInfoRsp))
+	}
+
+	rsp := &GetInfoRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+// InfoServer_ServiceDesc descriptor for server.RegisterService
+var InfoServer_ServiceDesc = server.ServiceDesc{
+	ServiceName: "trpc.MovieService.operation.Info",
+	HandlerType: ((*InfoService)(nil)),
+	Methods: []server.Method{
+		{
+			Name: "/trpc.MovieService.operation.Info/GetInfo",
+			Func: InfoService_GetInfo_Handler,
+		},
+	},
+}
+
+// RegisterInfoService register service
+func RegisterInfoService(s server.Service, svr InfoService) {
+	if err := s.Register(&InfoServer_ServiceDesc, svr); err != nil {
+		panic(fmt.Sprintf("Info register error:%v", err))
 	}
 
 }
@@ -194,9 +268,9 @@ func (c *UserClientProxyImpl) Register(ctx context.Context, req *RegisterReq, op
 	ctx, msg := codec.WithCloneMessage(ctx)
 	defer codec.PutBackMessage(msg)
 
-	msg.WithClientRPCName("/trpc.moviePlay.operation.User/Register")
+	msg.WithClientRPCName("/trpc.MovieService.operation.User/Register")
 	msg.WithCalleeServiceName(UserServer_ServiceDesc.ServiceName)
-	msg.WithCalleeApp("moviePlay")
+	msg.WithCalleeApp("MovieService")
 	msg.WithCalleeServer("operation")
 	msg.WithCalleeService("User")
 	msg.WithCalleeMethod("Register")
@@ -220,9 +294,9 @@ func (c *UserClientProxyImpl) CheckUserName(ctx context.Context, req *CheckUserN
 	ctx, msg := codec.WithCloneMessage(ctx)
 	defer codec.PutBackMessage(msg)
 
-	msg.WithClientRPCName("/trpc.moviePlay.operation.User/CheckUserName")
+	msg.WithClientRPCName("/trpc.MovieService.operation.User/CheckUserName")
 	msg.WithCalleeServiceName(UserServer_ServiceDesc.ServiceName)
-	msg.WithCalleeApp("moviePlay")
+	msg.WithCalleeApp("MovieService")
 	msg.WithCalleeServer("operation")
 	msg.WithCalleeService("User")
 	msg.WithCalleeMethod("CheckUserName")
@@ -246,9 +320,9 @@ func (c *UserClientProxyImpl) Login(ctx context.Context, req *LoginReq, opts ...
 	ctx, msg := codec.WithCloneMessage(ctx)
 	defer codec.PutBackMessage(msg)
 
-	msg.WithClientRPCName("/trpc.moviePlay.operation.User/Login")
+	msg.WithClientRPCName("/trpc.MovieService.operation.User/Login")
 	msg.WithCalleeServiceName(UserServer_ServiceDesc.ServiceName)
-	msg.WithCalleeApp("moviePlay")
+	msg.WithCalleeApp("MovieService")
 	msg.WithCalleeServer("operation")
 	msg.WithCalleeService("User")
 	msg.WithCalleeMethod("Login")
@@ -272,6 +346,9 @@ type ListClientProxy interface {
 
 	// GetList 获取视频列表
 	GetList(ctx context.Context, req *GetListReq, opts ...client.Option) (rsp *GetListRsp, err error)
+
+	// GetLeaderboard 获取视频排行榜
+	GetLeaderboard(ctx context.Context, req *GetLeaderboardReq, opts ...client.Option) (rsp *GetLeaderboardRsp, err error)
 }
 
 type ListClientProxyImpl struct {
@@ -288,9 +365,9 @@ func (c *ListClientProxyImpl) GetList(ctx context.Context, req *GetListReq, opts
 	ctx, msg := codec.WithCloneMessage(ctx)
 	defer codec.PutBackMessage(msg)
 
-	msg.WithClientRPCName("/trpc.moviePlay.operation.List/GetList")
+	msg.WithClientRPCName("/trpc.MovieService.operation.List/GetList")
 	msg.WithCalleeServiceName(ListServer_ServiceDesc.ServiceName)
-	msg.WithCalleeApp("moviePlay")
+	msg.WithCalleeApp("MovieService")
 	msg.WithCalleeServer("operation")
 	msg.WithCalleeService("List")
 	msg.WithCalleeMethod("GetList")
@@ -301,6 +378,74 @@ func (c *ListClientProxyImpl) GetList(ctx context.Context, req *GetListReq, opts
 	callopts = append(callopts, opts...)
 
 	rsp := &GetListRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *ListClientProxyImpl) GetLeaderboard(ctx context.Context, req *GetLeaderboardReq, opts ...client.Option) (*GetLeaderboardRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.List/GetLeaderboard")
+	msg.WithCalleeServiceName(ListServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("List")
+	msg.WithCalleeMethod("GetLeaderboard")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &GetLeaderboardRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+// InfoClientProxy defines service client proxy
+type InfoClientProxy interface {
+
+	// GetInfo 获取视频详情
+	GetInfo(ctx context.Context, req *GetInfoReq, opts ...client.Option) (rsp *GetInfoRsp, err error)
+}
+
+type InfoClientProxyImpl struct {
+	client client.Client
+	opts   []client.Option
+}
+
+var NewInfoClientProxy = func(opts ...client.Option) InfoClientProxy {
+	return &InfoClientProxyImpl{client: client.DefaultClient, opts: opts}
+}
+
+func (c *InfoClientProxyImpl) GetInfo(ctx context.Context, req *GetInfoReq, opts ...client.Option) (*GetInfoRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Info/GetInfo")
+	msg.WithCalleeServiceName(InfoServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Info")
+	msg.WithCalleeMethod("GetInfo")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &GetInfoRsp{}
 
 	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
 		return nil, err

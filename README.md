@@ -194,23 +194,19 @@ SELECT
     viewTable.mViews,
     likeTable.mLikes,
     collectTable.mCollects
-FROM list
-WHERE mid
-IN (SELECT mid FROM list WHERE mStatus=1 AND mTypeID = 1 LIMIT (pageNo - 1) * pageSize,1)
-LIMIT pageSize
-AS baseTable
+FROM list AS baseTable
 
-LEFT JOIN (SELECT mid, COUNT(*) AS mViews FROM record GROUP BY mid)
-AS viewTable
+LEFT JOIN (SELECT mid, COUNT(*) AS mViews FROM record WHERE type = 3 GROUP BY mid) AS viewTable
 ON baseTable.mid = viewTable.mid
 
-LEFT JOIN (SELECT mid, COUNT(*) AS mLikes FROM record GROUP BY mid)
-AS likeTable
+LEFT JOIN (SELECT mid, COUNT(*) AS mLikes FROM record WHERE type = 1 GROUP BY mid) AS likeTable
 ON baseTable.mid = likeTable.mid
 
-LEFT JOIN (SELECT mid, COUNT(*) AS mCollects FROM record GROUP BY mid)
-AS collectTable
-ON baseTable.mid = collectTable.mid;
+LEFT JOIN (SELECT mid, COUNT(*) AS mCollects FROM record WHERE type = 2 GROUP BY mid) AS collectTable
+ON baseTable.mid = collectTable.mid
+
+WHERE baseTable.mid >= (SELECT mid FROM list WHERE mStatus = 1 AND mTypeID = 1 LIMIT (pageNo - 1) * pageSize,1)
+LIMIT pageSize;
 ```
 
 #### 计算电影总数
@@ -257,14 +253,12 @@ type: 1-点赞 2-收藏 3-播放
 SELECT
     baseTable.mid,
     baseTable.mName,
-    viewTable.mViews,
-FROM list
-WHERE mStatus=1
-AS baseTable
+    totalTable.mTotal,
+FROM list AS baseTable
 
-RIGHT JOIN (SELECT mid, COUNT(*) AS mViews FROM record GROUP BY mid ORDER BY mViews DESC LIMIT 5)
-AS viewTable
-ON baseTable.mid = viewTable.mid
+RIGHT JOIN (SELECT mid, COUNT(*) AS mTotal FROM record WHERE type = 3 GROUP BY mid ORDER BY mTotal DESC LIMIT 5) AS totalTable
+ON baseTable.mid = totalTable.mid
+WHERE mStatus = 1
 ```
 
 #### 收藏榜
@@ -273,14 +267,12 @@ ON baseTable.mid = viewTable.mid
 SELECT
     baseTable.mid,
     baseTable.mName,
-    likeTable.mViews,
-FROM list
-WHERE mStatus=1
-AS baseTable
+    totalTable.mTotal,
+FROM list AS baseTable
 
-RIGHT JOIN (SELECT mid, COUNT(*) AS mLikes FROM record GROUP BY mid ORDER BY mLikes DESC LIMIT 5)
-AS likeTable
-ON baseTable.mid = likeTable.mid
+RIGHT JOIN (SELECT mid, COUNT(*) AS mTotal FROM record WHERE type = 2 GROUP BY mid ORDER BY mTotal DESC LIMIT 5) AS totalTable
+ON baseTable.mid = totalTable.mid
+WHERE mStatus = 1
 ```
 
 #### 点赞榜
@@ -289,14 +281,12 @@ ON baseTable.mid = likeTable.mid
 SELECT
     baseTable.mid,
     baseTable.mName,
-    collectTable.mViews,
-FROM list
-WHERE mStatus=1
-AS baseTable
+    totalTable.mTotal,
+FROM list AS baseTable
 
-RIGHT JOIN (SELECT mid, COUNT(*) AS mCollects FROM record GROUP BY mid ORDER BY mCollects DESC LIMIT 5)
-AS collectTable
-ON baseTable.mid = collectTable.mid
+RIGHT JOIN (SELECT mid, COUNT(*) AS mTotal FROM record WHERE type = 1 GROUP BY mid ORDER BY mTotal DESC LIMIT 5) AS totalTable
+ON baseTable.mid = totalTable.mid
+WHERE mStatus = 1
 ```
 
 #### 点赞

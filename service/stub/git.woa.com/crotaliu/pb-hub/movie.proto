@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package trpc.moviePlay.operation;
+package trpc.MovieService.operation;
 
 option go_package="git.woa.com/crotaliu/pb-hub";
 
@@ -20,6 +20,14 @@ service User {
 service List {
   // 获取视频列表
   rpc GetList(GetListReq) returns (GetListRsp) {}
+  // 获取视频排行榜
+  rpc GetLeaderboard(GetLeaderboardReq) returns (GetLeaderboardRsp) {}
+}
+
+// 视频详情
+service Info {
+  // 获取视频详情
+  rpc GetInfo(GetInfoReq) returns (GetInfoRsp) {}
 }
 
 /* 请求参数 */
@@ -48,8 +56,18 @@ message GetListReq {
   repeated uint32 mLanguageID  = 4; // 电影语言ID
   repeated uint32 mDateYearID  = 5; // 电影上映年份ID
   uint32          mDoubanScore = 6; // 豆瓣评分
-  int32           pageNo       = 7; // 页码
-  int32           pageSize     = 8; // 容量
+  uint32          pageNo       = 7; // 页码
+  uint32          pageSize     = 8; // 容量
+}
+
+// 获取视频排行榜 请求参数
+message GetLeaderboardReq {
+  uint32 mType   = 1; // 类型，1-播放榜 2-收藏榜 3-点赞榜
+}
+
+// 视频详情 请求参数
+message GetInfoReq {
+
 }
 
 /* 响应参数 */
@@ -105,4 +123,21 @@ message GetListRsp {
   int32           code   = 1; // 返回码
   string          msg    = 2; // 返回信息
   Result          result = 3; // 返回结果
+}
+
+// 获取视频排行榜 响应参数
+message GetLeaderboardRsp {
+  message List {
+    uint32 mid           = 1; // 电影ID
+    string mName         = 2; // 电影名
+    uint32 mTotal        = 3; // 电影总量
+  }
+  int32           code   = 1; // 返回码
+  string          msg    = 2; // 返回信息
+  repeated List   result = 3; // 返回结果
+}
+
+// 视频详情 响应参数
+message GetInfoRsp {
+
 }

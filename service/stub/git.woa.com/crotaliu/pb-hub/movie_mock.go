@@ -113,6 +113,57 @@ func (mr *MockListServiceMockRecorder) GetList(ctx, req, rsp interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetList", reflect.TypeOf((*MockListService)(nil).GetList), ctx, req, rsp)
 }
 
+// GetLeaderboard mocks base method
+func (m *MockListService) GetLeaderboard(ctx context.Context, req *GetLeaderboardReq, rsp *GetLeaderboardRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetLeaderboard", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetLeaderboard indicates an expected call of GetLeaderboard
+func (mr *MockListServiceMockRecorder) GetLeaderboard(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLeaderboard", reflect.TypeOf((*MockListService)(nil).GetLeaderboard), ctx, req, rsp)
+}
+
+// MockInfoService is a mock of InfoService interface
+type MockInfoService struct {
+	ctrl     *gomock.Controller
+	recorder *MockInfoServiceMockRecorder
+}
+
+// MockInfoServiceMockRecorder is the mock recorder for MockInfoService
+type MockInfoServiceMockRecorder struct {
+	mock *MockInfoService
+}
+
+// NewMockInfoService creates a new mock instance
+func NewMockInfoService(ctrl *gomock.Controller) *MockInfoService {
+	mock := &MockInfoService{ctrl: ctrl}
+	mock.recorder = &MockInfoServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockInfoService) EXPECT() *MockInfoServiceMockRecorder {
+	return m.recorder
+}
+
+// GetInfo mocks base method
+func (m *MockInfoService) GetInfo(ctx context.Context, req *GetInfoReq, rsp *GetInfoRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetInfo", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetInfo indicates an expected call of GetInfo
+func (mr *MockInfoServiceMockRecorder) GetInfo(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInfo", reflect.TypeOf((*MockInfoService)(nil).GetInfo), ctx, req, rsp)
+}
+
 // MockUserClientProxy is a mock of UserClientProxy interface
 type MockUserClientProxy struct {
 	ctrl     *gomock.Controller
@@ -237,4 +288,67 @@ func (mr *MockListClientProxyMockRecorder) GetList(ctx, req interface{}, opts ..
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, req}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetList", reflect.TypeOf((*MockListClientProxy)(nil).GetList), varargs...)
+}
+
+// GetLeaderboard mocks base method
+func (m *MockListClientProxy) GetLeaderboard(ctx context.Context, req *GetLeaderboardReq, opts ...client.Option) (*GetLeaderboardRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetLeaderboard", varargs...)
+	ret0, _ := ret[0].(*GetLeaderboardRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetLeaderboard indicates an expected call of GetLeaderboard
+func (mr *MockListClientProxyMockRecorder) GetLeaderboard(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLeaderboard", reflect.TypeOf((*MockListClientProxy)(nil).GetLeaderboard), varargs...)
+}
+
+// MockInfoClientProxy is a mock of InfoClientProxy interface
+type MockInfoClientProxy struct {
+	ctrl     *gomock.Controller
+	recorder *MockInfoClientProxyMockRecorder
+}
+
+// MockInfoClientProxyMockRecorder is the mock recorder for MockInfoClientProxy
+type MockInfoClientProxyMockRecorder struct {
+	mock *MockInfoClientProxy
+}
+
+// NewMockInfoClientProxy creates a new mock instance
+func NewMockInfoClientProxy(ctrl *gomock.Controller) *MockInfoClientProxy {
+	mock := &MockInfoClientProxy{ctrl: ctrl}
+	mock.recorder = &MockInfoClientProxyMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockInfoClientProxy) EXPECT() *MockInfoClientProxyMockRecorder {
+	return m.recorder
+}
+
+// GetInfo mocks base method
+func (m *MockInfoClientProxy) GetInfo(ctx context.Context, req *GetInfoReq, opts ...client.Option) (*GetInfoRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetInfo", varargs...)
+	ret0, _ := ret[0].(*GetInfoRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetInfo indicates an expected call of GetInfo
+func (mr *MockInfoClientProxyMockRecorder) GetInfo(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInfo", reflect.TypeOf((*MockInfoClientProxy)(nil).GetInfo), varargs...)
 }
