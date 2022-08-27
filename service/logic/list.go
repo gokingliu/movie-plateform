@@ -15,7 +15,7 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32, pageNo,
 	var list []*pb.GetListRsp_List
 	var count int64
 	// 获取 WHERE 条件
-	whereSQL := utils.SpliceWhereSql(data, role)
+	whereSQL := utils.SpliceWhereSql(data)
 	// 不同角色 WHERE 条件不同
 	if role != uint32(3) {
 		whereSQL += fmt.Sprintf(" AND mStatus = %d", 1)

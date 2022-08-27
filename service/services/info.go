@@ -15,13 +15,17 @@ func (s *InfoImpl) GetInfo(ctx context.Context, req *pb.GetInfoReq, rsp *pb.GetI
 	// ConnDB 实例
 	db := utils.ConnDB()
 	// 判断 token，并获取用户名、用户角色
-	tokenBol, _, _, _ := logic.PreHandleTokenLogic(db, ctx)
+	tokenBol, _, _, tokenErr := logic.PreHandleTokenLogic(db, ctx)
 	// 查询视频详情逻辑
-	result, err := logic.GetInfoLogic(db, req.Mid)
+	result, dbErr := logic.GetInfoLogic(db, req.Mid)
+	if dbErr != nil {
+		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
+		return nil
+	}
 	// 客户端接口，判断 token 解析是否正常
 	// 不正常时返回相应的错误码，同时返回视频详情，前端正常展示，但清空用户信息
-	if !tokenBol || err != nil {
-		rsp.Code, rsp.Msg = config.ClientUserInfoError.Code, config.ClientUserInfoError.Msg
+	if !tokenBol {
+		rsp.Code, rsp.Msg = config.ClientUserInfoError.Code, utils.GetErrorMap(tokenErr.Error()).Msg
 	} else {
 		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
 	}
@@ -37,11 +41,15 @@ func (s *InfoImpl) GetRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.Rec
 	// 判断 token，并获取用户名、用户角色
 	tokenBol, userName, _, tokenErr := logic.PreHandleTokenLogic(db, ctx)
 	// 查询记录逻辑
-	result, err := logic.GetRecordLogic(db, userName, req.Mid, req.MType)
+	result, dbErr := logic.GetRecordLogic(db, userName, req.Mid, req.MType)
+	if dbErr != nil {
+		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
+		return nil
+	}
 	// 客户端接口，判断 token 解析是否正常
 	// 不正常时返回相应的错误码，清空用户信息，并返回 false
-	if !tokenBol || tokenErr != nil || err != nil {
-		rsp.Code, rsp.Msg = config.ClientUserInfoError.Code, config.ClientUserInfoError.Msg
+	if !tokenBol || tokenErr != nil {
+		rsp.Code, rsp.Msg = config.ClientUserInfoError.Code, utils.GetErrorMap(tokenErr.Error()).Msg
 		rsp.Result = false
 	} else {
 		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg

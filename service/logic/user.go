@@ -69,14 +69,14 @@ func WriteTokenLogic(db *gorm.DB, userName, token string) error {
 // PreHandleTokenLogic 检查 http 带来的 token 是否在数据库中
 func PreHandleTokenLogic(db *gorm.DB, ctx context.Context) (bool, string, uint32, error) {
 	// 获取请求头中的 token
-	httpToken, err := utils.GetToken(ctx)
-	if err != nil {
-		return false, "", 1, config.New(config.ClientNoTokenError)
+	httpToken, getTokenErr := utils.GetToken(ctx)
+	if getTokenErr != nil {
+		return false, "", 1, getTokenErr
 	}
 	// 解密 token 中的 userName 字段
-	userName, err := utils.DecodeToken(httpToken, "userName")
-	if err != nil {
-		return false, "", 1, config.New(config.ClientExtractTokenError)
+	userName, decodeTokenErr := utils.DecodeToken(httpToken, "userName")
+	if decodeTokenErr != nil {
+		return false, "", 1, decodeTokenErr
 	}
 	// 获取 token 数据表中该 userName 对应的 token
 	var token string

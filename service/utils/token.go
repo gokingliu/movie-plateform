@@ -38,7 +38,7 @@ func DecodeToken(token string, key string) (string, error) {
 	// 解密 token
 	decodeStr, err := base64.StdEncoding.DecodeString(token)
 	if err != nil {
-		return "", config.New(config.ClientExtractTokenError)
+		return "", config.New(config.ClientInvalidTokenError)
 	}
 	// 解密 token 内容转为文本
 	tokenStr := string(decodeStr)
@@ -54,12 +54,12 @@ func DecodeToken(token string, key string) (string, error) {
 		for _, tokenItem := range tokenSplit {
 			tokenItemSplice := strings.Split(tokenItem, "=")
 			if len(tokenItemSplice) != 2 {
-				return "", config.New(config.ClientExtractTokenError)
+				return "", config.New(config.ClientForgedIdentity)
 			}
 			tokenMap[tokenItemSplice[0]] = tokenItemSplice[1]
 		}
 		return tokenMap[key], nil
 	}
 
-	return "", config.New(config.ClientExtractTokenError)
+	return "", config.New(config.ClientForgedIdentity)
 }

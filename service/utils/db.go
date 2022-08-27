@@ -41,7 +41,7 @@ func ConnDB() *gorm.DB {
 }
 
 // SpliceWhereSql 拼接 SQL 查询语句
-func SpliceWhereSql(data map[string]interface{}, role uint32) string {
+func SpliceWhereSql(data map[string]interface{}) string {
 	var whereSql string          // 筛选条件语句
 	var whereConditions []string // 计算筛选条件需要的字段
 	// 数据为切片时，使用 OR 筛选，数据不为切片时，使用相等筛选
