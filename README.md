@@ -164,23 +164,6 @@ status: 1-上线 2-下线
 
 ```sql
 SELECT
-    mid,
-    mName,
-    mPoster,
-    mTypeName,
-    mDoubanScore,
-    mDirector,
-    mStarring,
-    mCountryName,
-    mLanguageName,
-    mDate
-FROM list WHERE mStatus=1 AND mTypeID = 1 LIMIT pageNo,pageSize;
-```
-
-#### 优化后？连表查询播放、点赞、收藏量
-
-```sql
-SELECT
     baseTable.mid,
     baseTable.mName,
     baseTable.mPoster,
@@ -220,6 +203,7 @@ SELECT count(*) FROM list WHERE mStatus=1 AND mTypeID = 1;
 ```sql
 SELECT
     mid,
+    mUrl,
     mName,
     mPoster,
     mTypeName,
@@ -318,7 +302,7 @@ DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND type = 1;
 
 ```sql
 -- 查询
-SELECT mid FROM record WHERE userName='crotaliu' AND mid = 1 AND type = 1;
+SELECT mid FROM record WHERE userName='crotaliu' AND mid = 1 AND type = 2;
 
 -- 记录
 INSERT INTO record 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 当前目录
-CURRENT_DIR=$(cd "$(dirname "$0")" || return; pwd)
+CURRENT_DIR=$(cd ../; pwd)
 cd "${CURRENT_DIR}" || return
 
 # 资源控制
@@ -10,7 +10,7 @@ ulimit -c unlimited
 ulimit -s 65536
 
 # 执行文件 (进程也会包含此字符串)
-BIN="./movie_opration"
+BIN="./MovieService"
 # 配置文件
 CONFIG="conf/trpc_go.yaml"
 # 修改执行文件权限
@@ -19,7 +19,7 @@ chmod a+x ${BIN}
 # 查找进程
 TOTAL_PID=$(pgrep -f "${BIN}" | wc -l)
 # 判断进程数量
-if [[ $TOTAL_PID -gt 0 ]]; then
+if [ "${TOTAL_PID}" -gt 0 ]; then
     echo "${BIN} -conf ${CONFIG} service is alive"
 else
     echo "restart service "
@@ -32,8 +32,8 @@ sleep 1
 # 再次查找进程
 TOTAL_PID=$(pgrep -f "${BIN}" | wc -l)
 # 判断进程数量
-if [[ TOTAL_PID -gt 0 ]]; then
-    echo "${BIN} -conf ${CONFIG} service is bad"
-else
+if [ "${TOTAL_PID}" -gt 0 ]; then
     echo "${BIN} -conf ${CONFIG} service is alive"
+else
+    echo "${BIN} -conf ${CONFIG} service is bad"
 fi

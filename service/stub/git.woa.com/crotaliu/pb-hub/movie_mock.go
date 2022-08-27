@@ -164,6 +164,48 @@ func (mr *MockInfoServiceMockRecorder) GetInfo(ctx, req, rsp interface{}) *gomoc
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInfo", reflect.TypeOf((*MockInfoService)(nil).GetInfo), ctx, req, rsp)
 }
 
+// GetRecord mocks base method
+func (m *MockInfoService) GetRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRecord", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetRecord indicates an expected call of GetRecord
+func (mr *MockInfoServiceMockRecorder) GetRecord(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRecord", reflect.TypeOf((*MockInfoService)(nil).GetRecord), ctx, req, rsp)
+}
+
+// PostRecord mocks base method
+func (m *MockInfoService) PostRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "PostRecord", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// PostRecord indicates an expected call of PostRecord
+func (mr *MockInfoServiceMockRecorder) PostRecord(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PostRecord", reflect.TypeOf((*MockInfoService)(nil).PostRecord), ctx, req, rsp)
+}
+
+// DelRecord mocks base method
+func (m *MockInfoService) DelRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DelRecord", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DelRecord indicates an expected call of DelRecord
+func (mr *MockInfoServiceMockRecorder) DelRecord(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelRecord", reflect.TypeOf((*MockInfoService)(nil).DelRecord), ctx, req, rsp)
+}
+
 // MockUserClientProxy is a mock of UserClientProxy interface
 type MockUserClientProxy struct {
 	ctrl     *gomock.Controller
@@ -351,4 +393,64 @@ func (mr *MockInfoClientProxyMockRecorder) GetInfo(ctx, req interface{}, opts ..
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, req}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInfo", reflect.TypeOf((*MockInfoClientProxy)(nil).GetInfo), varargs...)
+}
+
+// GetRecord mocks base method
+func (m *MockInfoClientProxy) GetRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetRecord", varargs...)
+	ret0, _ := ret[0].(*RecordRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRecord indicates an expected call of GetRecord
+func (mr *MockInfoClientProxyMockRecorder) GetRecord(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRecord", reflect.TypeOf((*MockInfoClientProxy)(nil).GetRecord), varargs...)
+}
+
+// PostRecord mocks base method
+func (m *MockInfoClientProxy) PostRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "PostRecord", varargs...)
+	ret0, _ := ret[0].(*RecordRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// PostRecord indicates an expected call of PostRecord
+func (mr *MockInfoClientProxyMockRecorder) PostRecord(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PostRecord", reflect.TypeOf((*MockInfoClientProxy)(nil).PostRecord), varargs...)
+}
+
+// DelRecord mocks base method
+func (m *MockInfoClientProxy) DelRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DelRecord", varargs...)
+	ret0, _ := ret[0].(*RecordRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DelRecord indicates an expected call of DelRecord
+func (mr *MockInfoClientProxyMockRecorder) DelRecord(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelRecord", reflect.TypeOf((*MockInfoClientProxy)(nil).DelRecord), varargs...)
 }

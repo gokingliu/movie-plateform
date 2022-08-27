@@ -197,6 +197,15 @@ type InfoService interface {
 
 	// GetInfo 获取视频详情
 	GetInfo(ctx context.Context, req *GetInfoReq, rsp *GetInfoRsp) (err error)
+
+	// GetRecord 获取记录
+	GetRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) (err error)
+
+	// PostRecord 增加记录
+	PostRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) (err error)
+
+	// DelRecord 删除记录
+	DelRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) (err error)
 }
 
 func InfoService_GetInfo_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
@@ -219,6 +228,66 @@ func InfoService_GetInfo_Handler(svr interface{}, ctx context.Context, f server.
 	return rsp, nil
 }
 
+func InfoService_GetRecord_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &RecordReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(InfoService).GetRecord(ctx, reqbody.(*RecordReq), rspbody.(*RecordRsp))
+	}
+
+	rsp := &RecordRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func InfoService_PostRecord_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &RecordReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(InfoService).PostRecord(ctx, reqbody.(*RecordReq), rspbody.(*RecordRsp))
+	}
+
+	rsp := &RecordRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func InfoService_DelRecord_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &RecordReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(InfoService).DelRecord(ctx, reqbody.(*RecordReq), rspbody.(*RecordRsp))
+	}
+
+	rsp := &RecordRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
 // InfoServer_ServiceDesc descriptor for server.RegisterService
 var InfoServer_ServiceDesc = server.ServiceDesc{
 	ServiceName: "trpc.MovieService.operation.Info",
@@ -227,6 +296,18 @@ var InfoServer_ServiceDesc = server.ServiceDesc{
 		{
 			Name: "/trpc.MovieService.operation.Info/GetInfo",
 			Func: InfoService_GetInfo_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Info/GetRecord",
+			Func: InfoService_GetRecord_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Info/PostRecord",
+			Func: InfoService_PostRecord_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Info/DelRecord",
+			Func: InfoService_DelRecord_Handler,
 		},
 	},
 }
@@ -417,6 +498,15 @@ type InfoClientProxy interface {
 
 	// GetInfo 获取视频详情
 	GetInfo(ctx context.Context, req *GetInfoReq, opts ...client.Option) (rsp *GetInfoRsp, err error)
+
+	// GetRecord 获取记录
+	GetRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (rsp *RecordRsp, err error)
+
+	// PostRecord 增加记录
+	PostRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (rsp *RecordRsp, err error)
+
+	// DelRecord 删除记录
+	DelRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (rsp *RecordRsp, err error)
 }
 
 type InfoClientProxyImpl struct {
@@ -446,6 +536,84 @@ func (c *InfoClientProxyImpl) GetInfo(ctx context.Context, req *GetInfoReq, opts
 	callopts = append(callopts, opts...)
 
 	rsp := &GetInfoRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *InfoClientProxyImpl) GetRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Info/GetRecord")
+	msg.WithCalleeServiceName(InfoServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Info")
+	msg.WithCalleeMethod("GetRecord")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &RecordRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *InfoClientProxyImpl) PostRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Info/PostRecord")
+	msg.WithCalleeServiceName(InfoServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Info")
+	msg.WithCalleeMethod("PostRecord")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &RecordRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *InfoClientProxyImpl) DelRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Info/DelRecord")
+	msg.WithCalleeServiceName(InfoServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Info")
+	msg.WithCalleeMethod("DelRecord")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &RecordRsp{}
 
 	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
 		return nil, err
