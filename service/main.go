@@ -17,8 +17,9 @@ import (
 
 func main() {
 	s := trpc.NewServer()
-	pb.RegisterListService(s, &services.ListImpl{})
 	pb.RegisterUserService(s, &services.UserImpl{})
+	pb.RegisterListService(s, &services.ListImpl{})
+	pb.RegisterInfoService(s, &services.InfoImpl{})
 	if err := s.Serve(); err != nil {
 		log.Fatal(err)
 	}

@@ -17,7 +17,7 @@ func (s *InfoImpl) GetInfo(ctx context.Context, req *pb.GetInfoReq, rsp *pb.GetI
 	// 判断 token，并获取用户名、用户角色
 	tokenBol, _, _, tokenErr := logic.PreHandleTokenLogic(db, ctx)
 	// 查询视频详情逻辑
-	result, dbErr := logic.GetInfoLogic(db, req.Mid)
+	info, dbErr := logic.GetInfoLogic(db, req.Mid)
 	if dbErr != nil {
 		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
 		return nil
@@ -29,7 +29,22 @@ func (s *InfoImpl) GetInfo(ctx context.Context, req *pb.GetInfoReq, rsp *pb.GetI
 	} else {
 		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
 	}
-	rsp.Result = result
+	// 解构类型重新赋值
+	// TODO 不优雅，后续要优化
+	rsp.Result = &pb.GetInfoRsp_Result{
+		Mid:           info.Mid,
+		MUrl:          info.MUrl,
+		MName:         info.MName,
+		MPoster:       info.MPoster,
+		MTypeName:     info.MTypeName,
+		MDouBanScore:  info.MDouBanScore,
+		MDirector:     info.MDirector,
+		MStarring:     info.MStarring,
+		MCountryName:  info.MCountryName,
+		MLanguageName: info.MLanguageName,
+		MDate:         info.MDate,
+		MDesc:         info.MDesc,
+	}
 
 	return nil
 }
@@ -55,6 +70,17 @@ func (s *InfoImpl) GetRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.Rec
 		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
 		rsp.Result = result
 	}
+
+	return nil
+}
+
+// PostRecord 获取记录
+func (s *InfoImpl) PostRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.RecordRsp) error {
+
+	return nil
+}
+
+func (s *InfoImpl) DelRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.RecordRsp) error {
 
 	return nil
 }

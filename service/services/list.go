@@ -30,7 +30,7 @@ func (s *ListImpl) GetList(ctx context.Context, req *pb.GetListReq, rsp *pb.GetL
 		return nil
 	}
 	// 查询电影列表逻辑
-	result, count, dbErr := logic.GetListLogic(db, mapData, role, req.PageNo, req.PageSize)
+	resultList, count, dbErr := logic.GetListLogic(db, mapData, role, req.PageNo, req.PageSize)
 	if dbErr != nil {
 		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
 		return nil
@@ -42,8 +42,31 @@ func (s *ListImpl) GetList(ctx context.Context, req *pb.GetListReq, rsp *pb.GetL
 	} else {
 		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
 	}
+	// 解构类型重新赋值
+	// TODO 不优雅，后续要优化
+	var listRsp []*pb.GetListRsp_List
+	for _, result := range resultList {
+		listRsp = append(listRsp, &pb.GetListRsp_List{
+			Mid:           result.Mid,
+			MName:         result.MName,
+			MPoster:       result.MPoster,
+			MTypeName:     result.MTypeName,
+			MDouBanScore:  result.MDouBanScore,
+			MDirector:     result.MDirector,
+			MStarring:     result.MStarring,
+			MCountryName:  result.MCountryName,
+			MLanguageName: result.MLanguageName,
+			MDateYear:     result.MDateYear,
+			MDate:         result.MDate,
+			MViews:        result.MViews,
+			MLikes:        result.MLikes,
+			MCollects:     result.MCollects,
+			CreateTime:    result.CreateTime,
+			UpdateTime:    result.UpdateTime,
+		})
+	}
 	rsp.Result = &pb.GetListRsp_Result{
-		List:  result,
+		List:  listRsp,
 		Count: count,
 	}
 

@@ -60,8 +60,8 @@ message GetListReq {
   repeated uint32 mTypeID      = 2; // 电影类型ID
   repeated uint32 mCountryID   = 3; // 电影制片国家/地区ID
   repeated uint32 mLanguageID  = 4; // 电影语言ID
-  repeated uint32 mDateYearID  = 5; // 电影上映年份ID
-  uint32          mDoubanScore = 6; // 豆瓣评分
+  repeated uint32 mDateYear    = 5; // 电影上映年份
+  uint32          mDouBanScore = 6; // 豆瓣评分
   uint32          pageNo       = 7; // 页码
   uint32          pageSize     = 8; // 容量
 }
@@ -101,7 +101,7 @@ message CheckUserNameRsp {
 message LoginRsp {
   message Result {
     string token     = 1; // 用户 token
-    int64  loginTime = 2; // 登录时间
+    uint64 loginTime = 2; // 登录时间
   }
   int32       code   = 1; // 返回码
   string      msg    = 2; // 返回信息
@@ -115,20 +115,21 @@ message GetListRsp {
     string mName         = 2; // 电影名
     string mPoster       = 3; // 电影海报
     string mTypeName     = 4; // 电影类型
-    string mDoubanScore  = 5; // 豆瓣评分
+    float  mDouBanScore  = 5; // 豆瓣评分
     string mDirector     = 6; // 电影导演
     string mStarring     = 7; // 电影主演
     string mCountryName  = 8; // 电影制片国家/地区
     string mLanguageName = 9; // 电影语言
-    uint32 mDate         = 10; // 电影上映日期
-    uint32 mViews        = 11; // 电影播放量
-    uint32 mLikes        = 12; // 电影点赞量
-    uint32 mCollects     = 13; // 电影收藏量
-    uint32 createTime    = 14; // 创建时间
-    uint32 updateTime    = 15; // 更新时间
+    string mDate         = 10; // 电影上映日期
+    uint32 mDateYear     = 11; // 电影上映日期
+    uint32 mViews        = 12; // 电影播放量
+    uint32 mLikes        = 13; // 电影点赞量
+    uint32 mCollects     = 14; // 电影收藏量
+    uint64 createTime    = 15; // 创建时间
+    uint64 updateTime    = 16; // 更新时间
   }
   message Result {
-    int64         count  = 1; // 总量
+    uint32        count  = 1; // 总量
     repeated List list   = 2; // 列表
   }
   int32           code   = 1; // 返回码
@@ -156,13 +157,13 @@ message GetInfoRsp {
     string mName         = 3; // 电影名
     string mPoster       = 4; // 电影海报
     string mTypeName     = 5; // 电影类型
-    string mDoubanScore  = 6; // 豆瓣评分
+    float  mDouBanScore  = 6; // 豆瓣评分
     string mDirector     = 7; // 电影导演
     string mStarring     = 8; // 电影主演
     string mCountryName  = 9; // 电影制片国家/地区
     string mLanguageName = 10; // 电影语言
-    uint32 mDate         = 11; // 电影上映日期
-    uint32 mDesc         = 12; // 电影简介
+    string mDate         = 11; // 电影上映日期
+    string mDesc         = 12; // 电影简介
   }
   int32           code   = 1; // 返回码
   string          msg    = 2; // 返回信息

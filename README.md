@@ -12,9 +12,9 @@ CREATE DATABASE IF NOT EXISTS movie DEFAULT CHARSET utf8 COLLATE utf8_general_ci
 ```sql
 CREATE TABLE `user` (
 `uid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-`userName` varchar(10) NOT NULL COMMENT '用户名',
+`userName` varchar(32) NOT NULL COMMENT '用户名',
 `password` varchar(32) NOT NULL COMMENT '密码',
-`role` int(10) NOT NULL COMMENT '角色',
+`role` tinyint(4) unsigned NOT NULL COMMENT '角色',
 `createTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '创建时间',
 `updateTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '更新时间',
 PRIMARY KEY (`uid`),
@@ -37,14 +37,14 @@ VALUES
 (
     'guest',
     '',
-    'guest',
+    1,
     1658762844,
     1658762844
 ),
 (
-    'admin',
-    'root123456',
-    'admin',
+    'crotaliu',
+    '12345678',
+    3,
     1658762844,
     1658762844
 );
@@ -66,7 +66,7 @@ SELECT password FROM user WHERE userName='crotaliu';
 ```sql
 CREATE TABLE `token` (
 `token` varchar(255) NOT NULL COMMENT '用户token',
-`userName` varchar(10) NOT NULL COMMENT '用户名',
+`userName` varchar(32) NOT NULL COMMENT '用户名',
 `loginTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '登录时间',
 PRIMARY KEY (`token`),
 UNIQUE KEY `userName` (`userName`),
@@ -83,7 +83,7 @@ INSERT INTO token
 )
 VALUES
 (
-    'dXNlck5hbWU9Y3JvdGFsaXU7bG9naW5UaW1lPTE2NTg3NjI4NDQ7dXVpZD0zOGY2MDE4OS1hOGJkLTRlZWUtOTViZC1jZDIwNTM0NDc1ZjE=',
+    'dXNlck5hbWU9Y3JvdGFsaXU7bG9naW5UaW1lPTE2NTkyMDAyMDI7dXVpZD0wYWYzOWUzYS1lNDE2LTRlYzAtYTExYi01MDliNTAxOTA0YTY=',
     'crotaliu',
     1658762844
 );
@@ -91,7 +91,7 @@ VALUES
 
 原文：userName=crotaliu;loginTime=1658762844;uuid=38f60189-a8bd-4eee-95bd-cd20534475f1
 
-token：dGhpcyBpcyBhIGV4YW1wbGV1c2VyTmFtZT1jcm9vdGFsaXU7bG9naW5UaW1lPTE2NTg1NjcxODYwMDA=
+token：dXNlck5hbWU9Y3JvdGFsaXU7bG9naW5UaW1lPTE2NTkyMDAyMDI7dXVpZD0wYWYzOWUzYS1lNDE2LTRlYzAtYTExYi01MDliNTAxOTA0YTY=
 
 查找密码正确的用户名，删除同名的 token
 ```sql
@@ -106,7 +106,7 @@ SELECT role FROM user WHERE userName='crotaliu';
 ```
 
 ```sql
-SELECT token FROM token WHERE token='dXNlck5hbWU9Y3JvdGFsaXU7bG9naW5UaW1lPTE2NTg3NjI4NDQ7dXVpZD0zOGY2MDE4OS1hOGJkLTRlZWUtOTViZC1jZDIwNTM0NDc1ZjE=';
+SELECT token FROM token WHERE token='dXNlck5hbWU9Y3JvdGFsaXU7bG9naW5UaW1lPTE2NTkyMDAyMDI7dXVpZD0wYWYzOWUzYS1lNDE2LTRlYzAtYTExYi01MDliNTAxOTA0YTY=';
 ```
 校验 token，每次接口请求前，先校验 token 是否在表中，token 错误的逻辑：
 - 用户接口，注册、登录、检查用户名重复接口，忽略 token
@@ -127,32 +127,31 @@ DELETE FROM token WHERE loginTime >= now() - 7 * 24 * 60 * 60 * 1000;
 ```sql
 CREATE TABLE `list` (
 `mid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '电影ID',
-`mURL` varchar(20) NOT NULL COMMENT '电影URL',
+`mURL` varchar(255) NOT NULL COMMENT '电影URL',
 `mName` varchar(255) NOT NULL COMMENT '电影名',
 `mPoster` varchar(255) NOT NULL COMMENT '电影海报',
-`mTypeID` int(10) NOT NULL COMMENT '电影类型ID',
+`mTypeID` tinyint(4) unsigned NOT NULL COMMENT '电影类型ID',
 `mTypeName` varchar(10) NOT NULL COMMENT '电影类型',
-`mDoubanScore` float NOT NULL COMMENT '豆瓣评分',
-`mDirector` varchar(20) NOT NULL COMMENT '电影导演',
+`mDoubanScore` float(2,1) NOT NULL COMMENT '豆瓣评分',
+`mDirector` varchar(50) NOT NULL COMMENT '电影导演',
 `mStarring` varchar(255) NOT NULL COMMENT '电影主演',
-`mCountryID` int(10) NOT NULL COMMENT '电影制片国家/地区ID',
+`mCountryID` tinyint(4) unsigned NOT NULL COMMENT '电影制片国家/地区ID',
 `mCountryName` varchar(10) NOT NULL COMMENT '电影制片国家/地区',
-`mLanguageID` int(10) NOT NULL COMMENT '电影语言ID',
+`mLanguageID` tinyint(4) unsigned NOT NULL COMMENT '电影语言ID',
 `mLanguageName` varchar(10) NOT NULL COMMENT '电影语言',
-`mDateYearID` int(10) NOT NULL COMMENT '电影上映年份ID',
-`mDateYearName` int(10) NOT NULL COMMENT '电影上映年份',
+`mDateYear` smallint(6) unsigned NOT NULL COMMENT '电影上映年份',
 `mDate` varchar(10) NOT NULL COMMENT '电影上映日期',
-`mDesc` varchar(1000) NOT NULL COMMENT '电影简介',
-`mStatus` int(10) NOT NULL COMMENT '电影状态',
+`mDesc` varchar(1024) NOT NULL COMMENT '电影简介',
+`mStatus` tinyint(4) unsigned NOT NULL COMMENT '电影状态',
 `createTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '创建时间',
 `updateTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '更新时间',
 PRIMARY KEY (`mid`),
 KEY `index_name` (`mName`),
 KEY `index_mTypeID` (`mTypeID`),
-KEY `index_mDoubanScore` (`mDoubanScore`),
+KEY `index_mDouBanScore` (`mDouBanScore`),
 KEY `index_mCountryID` (`mCountryID`),
 KEY `index_mLanguageID` (`mLanguageID`),
-KEY `index_mDateYearID` (`mDateYearID`),
+KEY `index_mDateYear` (`mDateYear`),
 KEY `index_mStatus` (`mStatus`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
@@ -168,11 +167,12 @@ SELECT
     baseTable.mName,
     baseTable.mPoster,
     baseTable.mTypeName,
-    baseTable.mDoubanScore,
+    baseTable.mDouBanScore,
     baseTable.mDirector,
     baseTable.mStarring,
     baseTable.mCountryName,
     baseTable.mLanguageName,
+    baseTable.mDateYear,
     baseTable.mDate,
     viewTable.mViews,
     likeTable.mLikes,
@@ -224,7 +224,7 @@ FROM list WHERE mid = 1;
 CREATE TABLE `record` (
 `userName` varchar(10) NOT NULL COMMENT '用户名',
 `mid` int(10) NOT NULL COMMENT '电影ID',
-`type` int(10) NOT NULL COMMENT '点赞/收藏/播放',
+`type` tinyint(4) unsigned NOT NULL COMMENT '点赞/收藏/播放',
 `createTime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '创建时间',
 UNIQUE KEY `userName_mid_type` (`userName`, `mid`, `type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -360,17 +360,17 @@ INSERT INTO list
     mPoster,
     mTypeID,
     mTypeName,
-    mDoubanScore,
+    mDouBanScore,
     mDirector,
     mStarring,
     mCountryID,
     mCountryName,
     mLanguageID,
     mLanguageName,
-    mDateYearID,
-    mDateYearName,
+    mDateYear,
     mDate,
-    mDesc
+    mDesc,
+    mStatus
 )
 VALUES
 (
@@ -387,9 +387,9 @@ VALUES
     1,
     '英语',
     1994,
-    '1994年',
     '1994-07-01',
-    '阿甘是个智商只有75的低能儿。在学校里为了躲避别的孩子的欺侮，听从一个朋友珍妮的话而开始“跑”。他跑着躲避别人的捉弄。在中学时，他为了躲避别人而跑进了一所学校的橄榄球场，就这样跑进了大学。阿甘被破格录取，并成了橄榄球巨星，受到了肯尼迪总统的接见。'
+    '阿甘是个智商只有75的低能儿。在学校里为了躲避别的孩子的欺侮，听从一个朋友珍妮的话而开始“跑”。他跑着躲避别人的捉弄。在中学时，他为了躲避别人而跑进了一所学校的橄榄球场，就这样跑进了大学。阿甘被破格录取，并成了橄榄球巨星，受到了肯尼迪总统的接见。',
+    1
 );
 ```
 
