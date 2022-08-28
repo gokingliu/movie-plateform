@@ -10,6 +10,7 @@ type Status struct {
 
 var (
 	ResOk                    = Status{0, "Success"}
+	ResFail                  = Status{-1, ""}
 	InnerProcessingTimeout   = Status{-100, "内部处理超时"}
 	InnerServiceOverload     = Status{-200, "内部服务过载"}
 	InnerLogicError          = Status{-300, "内部逻辑出错"}

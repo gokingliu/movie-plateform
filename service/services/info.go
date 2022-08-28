@@ -55,32 +55,72 @@ func (s *InfoImpl) GetRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.Rec
 	db := utils.ConnDB()
 	// 判断 token，并获取用户名、用户角色
 	tokenBol, userName, _, tokenErr := logic.PreHandleTokenLogic(db, ctx)
-	// 查询记录逻辑
-	result, dbErr := logic.GetRecordLogic(db, userName, req.Mid, req.MType)
-	if dbErr != nil {
-		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
-		return nil
-	}
 	// 客户端接口，判断 token 解析是否正常
-	// 不正常时返回相应的错误码，清空用户信息，并返回 false
+	// 不正常时不允许请求 DB，并返回相应的错误码，清空用户信息
 	if !tokenBol || tokenErr != nil {
 		rsp.Code, rsp.Msg = config.ClientUserInfoError.Code, utils.GetErrorMap(tokenErr.Error()).Msg
-		rsp.Result = false
-	} else {
-		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
-		rsp.Result = result
+		return nil
 	}
+	// 查询记录逻辑
+	result, dbErr := logic.GetRecordLogic(db, userName, req.Mid, req.MType)
+	// 查询 DB 错误
+	if dbErr != nil {
+		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
+		rsp.Result = false
+		return nil
+	}
+	// 正常返回
+	rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
+	rsp.Result = result
 
 	return nil
 }
 
-// PostRecord 获取记录
+// PostRecord 添加记录
 func (s *InfoImpl) PostRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.RecordRsp) error {
+	// ConnDB 实例
+	db := utils.ConnDB()
+	// 判断 token，并获取用户名、用户角色
+	tokenBol, userName, _, tokenErr := logic.PreHandleTokenLogic(db, ctx)
+	// 客户端接口，判断 token 解析是否正常
+	// 不正常时不允许请求 DB，并返回相应的错误码，清空用户信息
+	if !tokenBol || tokenErr != nil {
+		rsp.Code, rsp.Msg = config.ClientUserInfoError.Code, utils.GetErrorMap(tokenErr.Error()).Msg
+		return nil
+	}
+	// 添加记录逻辑
+	dbErr := logic.PostRecordLogic(db, userName, req.Mid, req.MType)
+	// 添加 DB 错误
+	if dbErr != nil {
+		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
+		return nil
+	}
+	// 正常返回
+	rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
 
 	return nil
 }
 
 func (s *InfoImpl) DelRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.RecordRsp) error {
+	// ConnDB 实例
+	db := utils.ConnDB()
+	// 判断 token，并获取用户名、用户角色
+	tokenBol, userName, _, tokenErr := logic.PreHandleTokenLogic(db, ctx)
+	// 客户端接口，判断 token 解析是否正常
+	// 不正常时不允许请求 DB，并返回相应的错误码，清空用户信息
+	if !tokenBol || tokenErr != nil {
+		rsp.Code, rsp.Msg = config.ClientUserInfoError.Code, utils.GetErrorMap(tokenErr.Error()).Msg
+		return nil
+	}
+	// 删除记录逻辑
+	dbErr := logic.DelRecordLogic(db, userName, req.Mid, req.MType)
+	// 添加 DB 错误
+	if dbErr != nil {
+		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
+		return nil
+	}
+	// 正常返回
+	rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
 
 	return nil
 }

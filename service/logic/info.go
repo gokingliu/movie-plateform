@@ -4,6 +4,7 @@ import (
 	"MovieService/config"
 	"MovieService/models"
 	"gorm.io/gorm"
+	"time"
 )
 
 // GetInfoLogic 获取视频详情
@@ -25,4 +26,24 @@ func GetRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) (boo
 		Where("userName = ? AND mid = ? AND type = ? ", userName, mid, mType).Take(&selectMid)
 
 	return selectMid >= 1, midResult.Error
+}
+
+// PostRecordLogic 添加记录
+func PostRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) error {
+	dbResult := db.Debug().Model(&models.Record{}).Create(map[string]interface{}{
+		"userName":   userName,
+		"mid":        mid,
+		"type":       mType,
+		"createTime": time.Now().Unix(),
+	})
+
+	return dbResult.Error
+}
+
+// DelRecordLogic 删除记录
+func DelRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) error {
+	dbResult := db.Debug().
+		Where("userName = ? AND mid = ? AND type = ?", userName, mid, mType).Delete(&models.Record{})
+
+	return dbResult.Error
 }

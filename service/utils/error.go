@@ -10,6 +10,7 @@ type ErrStruct struct {
 	Msg  string
 }
 
+// GetErrorMap 读取 error 文本，解析为 struct 返回给前端
 func GetErrorMap(errStr string) ErrStruct {
 	// 定义 err 变量
 	var err ErrStruct

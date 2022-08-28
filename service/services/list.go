@@ -5,7 +5,6 @@ import (
 	"MovieService/logic"
 	"MovieService/utils"
 	"context"
-	"encoding/json"
 	pb "git.woa.com/crotaliu/pb-hub"
 )
 
@@ -18,15 +17,9 @@ func (s *ListImpl) GetList(ctx context.Context, req *pb.GetListReq, rsp *pb.GetL
 	// 判断 token，并获取用户名、用户角色
 	tokenBol, _, role, tokenErr := logic.PreHandleTokenLogic(db, ctx)
 	// struct 转 map
-	mapData := make(map[string]interface{})
-	reqData, marshalErr := json.Marshal(&req)
-	if marshalErr != nil {
-		rsp.Code, rsp.Msg = config.InnerMarshalError.Code, config.InnerMarshalError.Msg
-		return nil
-	}
-	unMarshalErr := json.Unmarshal(reqData, &mapData)
-	if unMarshalErr != nil {
-		rsp.Code, rsp.Msg = config.InnerUnmarshalError.Code, config.InnerUnmarshalError.Msg
+	mapData, mapErr := utils.StructToMap(req)
+	if mapErr != nil {
+		rsp.Code, rsp.Msg = config.ResFail.Code, utils.GetErrorMap(mapErr.Error()).Msg
 		return nil
 	}
 	// 查询电影列表逻辑
