@@ -12,11 +12,9 @@ import (
 // RegisterLogic 创建用户，写入到 user 表
 func RegisterLogic(db *gorm.DB, userName, password string) error {
 	dbResult := db.Debug().Model(&models.User{}).Create(map[string]interface{}{
-		"userName":   userName,
-		"password":   password,
-		"role":       2,
-		"createTime": time.Now().Unix(),
-		"updateTime": time.Now().Unix(),
+		"userName": userName,
+		"password": password,
+		"role":     2,
 	})
 
 	return dbResult.Error
@@ -58,9 +56,8 @@ func CleanTokenLogic(db *gorm.DB) error {
 // WriteTokenLogic 用户登录时，写入新 token
 func WriteTokenLogic(db *gorm.DB, userName, token string) error {
 	dbResult := db.Debug().Model(&models.Token{}).Create(map[string]interface{}{
-		"token":     token,
-		"userName":  userName,
-		"loginTime": time.Now().Unix(),
+		"token":    token,
+		"userName": userName,
 	})
 
 	return dbResult.Error
