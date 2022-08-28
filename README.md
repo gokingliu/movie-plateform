@@ -15,8 +15,8 @@ CREATE TABLE `user` (
 `userName` varchar(32) NOT NULL COMMENT '用户名',
 `password` varchar(32) NOT NULL COMMENT '密码',
 `role` tinyint(4) unsigned NOT NULL COMMENT '角色',
-`createTime` int(10) unsigned NOT NULL DEFAULT unix_timestamp(now()) COMMENT '创建时间',
-`updateTime` int(10) unsigned NOT NULL DEFAULT unix_timestamp(now()) COMMENT '更新时间',
+`createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+`updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (`uid`),
 UNIQUE KEY `userName` (`userName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -143,8 +143,8 @@ CREATE TABLE `list` (
 `mDate` varchar(10) NOT NULL COMMENT '电影上映日期',
 `mDesc` varchar(1024) NOT NULL COMMENT '电影简介',
 `mStatus` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '电影状态',
-`createTime` int(10) unsigned NOT NULL DEFAULT unix_timestamp(now()) COMMENT '创建时间',
-`updateTime` int(10) unsigned NOT NULL DEFAULT unix_timestamp(now()) COMMENT '更新时间',
+`createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+`updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 PRIMARY KEY (`mid`),
 KEY `index_name` (`mName`),
 KEY `index_mTypeID` (`mTypeID`),
@@ -225,7 +225,7 @@ CREATE TABLE `record` (
 `userName` varchar(10) NOT NULL COMMENT '用户名',
 `mid` int(10) NOT NULL COMMENT '电影ID',
 `type` tinyint(4) unsigned NOT NULL COMMENT '点赞/收藏/播放',
-`createTime` int(10) unsigned NOT NULL DEFAULT unix_timestamp(now()) COMMENT '创建时间',
+`createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 UNIQUE KEY `userName_mid_type` (`userName`, `mid`, `type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
@@ -427,8 +427,8 @@ CREATE TABLE `prop` (
 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '属性ID',
 `label` varchar(10) NOT NULL COMMENT '属性名',
 `value` int(10) NOT NULL COMMENT '属性值',
-`createTime` int(10) unsigned NOT NULL DEFAULT unix_timestamp(now()) COMMENT '创建时间',
-`updateTime` int(10) unsigned NOT NULL DEFAULT unix_timestamp(now()) COMMENT '创建时间'
+`createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+`updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间'
 PRIMARY KEY (`id`),
 KEY `index_value` (`value`),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

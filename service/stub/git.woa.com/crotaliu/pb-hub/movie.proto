@@ -4,7 +4,8 @@ package trpc.MovieService.operation;
 
 option go_package="git.woa.com/crotaliu/pb-hub";
 
-/* 注册服务 */
+/* ************************************ 注册服务 ************************************ */
+
 // 用户服务
 service User {
   // 用户注册
@@ -36,7 +37,20 @@ service Info {
   rpc DelRecord(RecordReq) returns (RecordRsp) {}
 }
 
-/* 请求参数 */
+// 视频管理
+service Manage {
+  // 增加视频
+  rpc AddInfo(ManageInfoReq) returns (ManageInfoRsp) {}
+  // 修改视频
+  rpc UpdateInfo(ManageInfoReq) returns (ManageInfoRsp) {}
+  // 修改视频状态
+  rpc UpdateInfoStatus(UpdateInfoStatusReq) returns (ManageInfoRsp) {}
+  // 删除视频
+  rpc DelInfo(DelInfoReq) returns (ManageInfoRsp) {}
+}
+
+/* ************************************ 请求参数 ************************************ */
+
 // 用户注册 请求参数
 message RegisterReq {
   string userName = 1; // 用户名
@@ -82,7 +96,40 @@ message RecordReq {
   uint32 mType   = 2; // 记录类型
 }
 
-/* 响应参数 */
+// 增加/更新视频 请求参数
+message ManageInfoReq {
+  message List {
+    string mUrl          = 1; // 电影 URL
+    string mName         = 2; // 电影名
+    string mPoster       = 3; // 电影海报
+    uint32 mTypeID       = 4; // 电影类型 ID
+    string mTypeName     = 5; // 电影类型
+    float  mDouBanScore  = 6; // 豆瓣评分
+    string mDirector     = 7; // 电影导演
+    string mStarring     = 8; // 电影主演
+    uint32 mCountryID    = 9; // 电影制片国家/地区 ID
+    string mCountryName  = 10; // 电影制片国家/地区
+    uint32 mLanguageID   = 11; // 电影语言
+    string mLanguageName = 12; // 电影语言
+    uint32 mDateYear     = 13; // 电影上映年份
+    string mDate         = 14; // 电影上映日期
+    string mDesc         = 15; // 电影简介
+  }
+  repeated List list     = 1; // 批量添加/更新视频
+}
+
+// 修改视频状态 请求参数
+message UpdateInfoStatusReq {
+  uint32 mStatus = 1; // 状态，1-上线 2-下线
+}
+
+// 删除视频 请求参数
+message DelInfoReq {
+  uint32 mid     = 1; // 视频 ID
+}
+
+/* ************************************ 响应参数 ************************************ */
+
 // 用户注册 响应参数
 message RegisterRsp {
   int32  code   = 1; // 返回码
@@ -101,7 +148,7 @@ message CheckUserNameRsp {
 message LoginRsp {
   message Result {
     string token     = 1; // 用户 token
-    uint64 loginTime = 2; // 登录时间
+    string loginTime = 2; // 登录时间
   }
   int32       code   = 1; // 返回码
   string      msg    = 2; // 返回信息
@@ -120,13 +167,13 @@ message GetListRsp {
     string mStarring     = 7; // 电影主演
     string mCountryName  = 8; // 电影制片国家/地区
     string mLanguageName = 9; // 电影语言
-    string mDate         = 10; // 电影上映日期
-    uint32 mDateYear     = 11; // 电影上映日期
+    uint32 mDateYear     = 10; // 电影上映年份
+    string mDate         = 11; // 电影上映日期
     uint32 mViews        = 12; // 电影播放量
     uint32 mLikes        = 13; // 电影点赞量
     uint32 mCollects     = 14; // 电影收藏量
-    uint64 createTime    = 15; // 创建时间
-    uint64 updateTime    = 16; // 更新时间
+    string createTime    = 15; // 创建时间
+    string updateTime    = 16; // 更新时间
   }
   message Result {
     uint32        count  = 1; // 总量
@@ -172,6 +219,13 @@ message GetInfoRsp {
 
 // 记录 响应参数
 message RecordRsp {
+  int32           code   = 1; // 返回码
+  string          msg    = 2; // 返回信息
+  bool            result = 3; // 返回结果
+}
+
+// 视频管理 响应参数
+message ManageInfoRsp {
   int32           code   = 1; // 返回码
   string          msg    = 2; // 返回信息
   bool            result = 3; // 返回结果

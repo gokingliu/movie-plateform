@@ -20,6 +20,7 @@ func main() {
 	pb.RegisterUserService(s, &services.UserImpl{})
 	pb.RegisterListService(s, &services.ListImpl{})
 	pb.RegisterInfoService(s, &services.InfoImpl{})
+	pb.RegisterManageService(s, &services.ManageImpl{})
 	if err := s.Serve(); err != nil {
 		log.Fatal(err)
 	}

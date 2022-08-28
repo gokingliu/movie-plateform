@@ -92,7 +92,7 @@ func (s *InfoImpl) PostRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.Re
 	dbErr := logic.PostRecordLogic(db, userName, req.Mid, req.MType)
 	// 添加 DB 错误
 	if dbErr != nil {
-		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
+		rsp.Code, rsp.Msg = config.InnerWriteDbError.Code, config.InnerWriteDbError.Msg
 		return nil
 	}
 	// 正常返回
@@ -116,7 +116,7 @@ func (s *InfoImpl) DelRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.Rec
 	dbErr := logic.DelRecordLogic(db, userName, req.Mid, req.MType)
 	// 添加 DB 错误
 	if dbErr != nil {
-		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
+		rsp.Code, rsp.Msg = config.InnerWriteDbError.Code, config.InnerWriteDbError.Msg
 		return nil
 	}
 	// 正常返回

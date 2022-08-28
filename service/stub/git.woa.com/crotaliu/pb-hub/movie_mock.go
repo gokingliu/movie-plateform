@@ -206,6 +206,85 @@ func (mr *MockInfoServiceMockRecorder) DelRecord(ctx, req, rsp interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelRecord", reflect.TypeOf((*MockInfoService)(nil).DelRecord), ctx, req, rsp)
 }
 
+// MockManageService is a mock of ManageService interface
+type MockManageService struct {
+	ctrl     *gomock.Controller
+	recorder *MockManageServiceMockRecorder
+}
+
+// MockManageServiceMockRecorder is the mock recorder for MockManageService
+type MockManageServiceMockRecorder struct {
+	mock *MockManageService
+}
+
+// NewMockManageService creates a new mock instance
+func NewMockManageService(ctrl *gomock.Controller) *MockManageService {
+	mock := &MockManageService{ctrl: ctrl}
+	mock.recorder = &MockManageServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockManageService) EXPECT() *MockManageServiceMockRecorder {
+	return m.recorder
+}
+
+// AddInfo mocks base method
+func (m *MockManageService) AddInfo(ctx context.Context, req *ManageInfoReq, rsp *ManageInfoRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddInfo", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddInfo indicates an expected call of AddInfo
+func (mr *MockManageServiceMockRecorder) AddInfo(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddInfo", reflect.TypeOf((*MockManageService)(nil).AddInfo), ctx, req, rsp)
+}
+
+// UpdateInfo mocks base method
+func (m *MockManageService) UpdateInfo(ctx context.Context, req *ManageInfoReq, rsp *ManageInfoRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateInfo", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateInfo indicates an expected call of UpdateInfo
+func (mr *MockManageServiceMockRecorder) UpdateInfo(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateInfo", reflect.TypeOf((*MockManageService)(nil).UpdateInfo), ctx, req, rsp)
+}
+
+// UpdateInfoStatus mocks base method
+func (m *MockManageService) UpdateInfoStatus(ctx context.Context, req *UpdateInfoStatusReq, rsp *ManageInfoRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateInfoStatus", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateInfoStatus indicates an expected call of UpdateInfoStatus
+func (mr *MockManageServiceMockRecorder) UpdateInfoStatus(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateInfoStatus", reflect.TypeOf((*MockManageService)(nil).UpdateInfoStatus), ctx, req, rsp)
+}
+
+// DelInfo mocks base method
+func (m *MockManageService) DelInfo(ctx context.Context, req *DelInfoReq, rsp *ManageInfoRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DelInfo", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DelInfo indicates an expected call of DelInfo
+func (mr *MockManageServiceMockRecorder) DelInfo(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelInfo", reflect.TypeOf((*MockManageService)(nil).DelInfo), ctx, req, rsp)
+}
+
 // MockUserClientProxy is a mock of UserClientProxy interface
 type MockUserClientProxy struct {
 	ctrl     *gomock.Controller
@@ -453,4 +532,107 @@ func (mr *MockInfoClientProxyMockRecorder) DelRecord(ctx, req interface{}, opts 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, req}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelRecord", reflect.TypeOf((*MockInfoClientProxy)(nil).DelRecord), varargs...)
+}
+
+// MockManageClientProxy is a mock of ManageClientProxy interface
+type MockManageClientProxy struct {
+	ctrl     *gomock.Controller
+	recorder *MockManageClientProxyMockRecorder
+}
+
+// MockManageClientProxyMockRecorder is the mock recorder for MockManageClientProxy
+type MockManageClientProxyMockRecorder struct {
+	mock *MockManageClientProxy
+}
+
+// NewMockManageClientProxy creates a new mock instance
+func NewMockManageClientProxy(ctrl *gomock.Controller) *MockManageClientProxy {
+	mock := &MockManageClientProxy{ctrl: ctrl}
+	mock.recorder = &MockManageClientProxyMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockManageClientProxy) EXPECT() *MockManageClientProxyMockRecorder {
+	return m.recorder
+}
+
+// AddInfo mocks base method
+func (m *MockManageClientProxy) AddInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "AddInfo", varargs...)
+	ret0, _ := ret[0].(*ManageInfoRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddInfo indicates an expected call of AddInfo
+func (mr *MockManageClientProxyMockRecorder) AddInfo(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddInfo", reflect.TypeOf((*MockManageClientProxy)(nil).AddInfo), varargs...)
+}
+
+// UpdateInfo mocks base method
+func (m *MockManageClientProxy) UpdateInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateInfo", varargs...)
+	ret0, _ := ret[0].(*ManageInfoRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateInfo indicates an expected call of UpdateInfo
+func (mr *MockManageClientProxyMockRecorder) UpdateInfo(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateInfo", reflect.TypeOf((*MockManageClientProxy)(nil).UpdateInfo), varargs...)
+}
+
+// UpdateInfoStatus mocks base method
+func (m *MockManageClientProxy) UpdateInfoStatus(ctx context.Context, req *UpdateInfoStatusReq, opts ...client.Option) (*ManageInfoRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateInfoStatus", varargs...)
+	ret0, _ := ret[0].(*ManageInfoRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateInfoStatus indicates an expected call of UpdateInfoStatus
+func (mr *MockManageClientProxyMockRecorder) UpdateInfoStatus(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateInfoStatus", reflect.TypeOf((*MockManageClientProxy)(nil).UpdateInfoStatus), varargs...)
+}
+
+// DelInfo mocks base method
+func (m *MockManageClientProxy) DelInfo(ctx context.Context, req *DelInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DelInfo", varargs...)
+	ret0, _ := ret[0].(*ManageInfoRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DelInfo indicates an expected call of DelInfo
+func (mr *MockManageClientProxyMockRecorder) DelInfo(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelInfo", reflect.TypeOf((*MockManageClientProxy)(nil).DelInfo), varargs...)
 }

@@ -11,8 +11,8 @@ import (
 )
 
 // GetListLogic 获取电影列表
-func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32, pageNo, pageSize uint32) ([]models.ListResult, uint32, error) {
-	var listResult []models.ListResult
+func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32, pageNo, pageSize uint32) ([]models.ListInfo, uint32, error) {
+	var ListInfo []models.ListInfo
 	var count int64
 	// 获取 WHERE 条件
 	whereSQL := utils.SpliceWhereSql(data)
@@ -37,7 +37,7 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32, pageNo,
 			"ON baseTable.mid = collectTable.mid "+
 			"WHERE baseTable.mid >= (SELECT mid FROM list WHERE "+whereSQL+" LIMIT ?,1) LIMIT ?",
 		(pageNo-1)*pageSize, pageSize,
-	).Scan(&listResult)
+	).Scan(&ListInfo)
 	// 总量
 	countResult := db.Debug().Model(&models.List{}).Where(whereSQL).Count(&count)
 	// 任意 db 读取错误，则返回错误
@@ -46,7 +46,7 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32, pageNo,
 		dbError = config.New(config.InnerReadDbError)
 	}
 
-	return listResult, uint32(count), dbError
+	return ListInfo, uint32(count), dbError
 }
 
 // GetLeaderboardLogic 获取视频排行榜

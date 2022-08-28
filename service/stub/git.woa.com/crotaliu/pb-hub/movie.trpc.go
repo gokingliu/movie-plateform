@@ -320,6 +320,134 @@ func RegisterInfoService(s server.Service, svr InfoService) {
 
 }
 
+// ManageService defines service
+type ManageService interface {
+
+	// AddInfo 增加视频
+	AddInfo(ctx context.Context, req *ManageInfoReq, rsp *ManageInfoRsp) (err error)
+
+	// UpdateInfo 修改视频
+	UpdateInfo(ctx context.Context, req *ManageInfoReq, rsp *ManageInfoRsp) (err error)
+
+	// UpdateInfoStatus 修改视频状态
+	UpdateInfoStatus(ctx context.Context, req *UpdateInfoStatusReq, rsp *ManageInfoRsp) (err error)
+
+	// DelInfo 删除视频
+	DelInfo(ctx context.Context, req *DelInfoReq, rsp *ManageInfoRsp) (err error)
+}
+
+func ManageService_AddInfo_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &ManageInfoReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(ManageService).AddInfo(ctx, reqbody.(*ManageInfoReq), rspbody.(*ManageInfoRsp))
+	}
+
+	rsp := &ManageInfoRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func ManageService_UpdateInfo_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &ManageInfoReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(ManageService).UpdateInfo(ctx, reqbody.(*ManageInfoReq), rspbody.(*ManageInfoRsp))
+	}
+
+	rsp := &ManageInfoRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func ManageService_UpdateInfoStatus_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &UpdateInfoStatusReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(ManageService).UpdateInfoStatus(ctx, reqbody.(*UpdateInfoStatusReq), rspbody.(*ManageInfoRsp))
+	}
+
+	rsp := &ManageInfoRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func ManageService_DelInfo_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &DelInfoReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(ManageService).DelInfo(ctx, reqbody.(*DelInfoReq), rspbody.(*ManageInfoRsp))
+	}
+
+	rsp := &ManageInfoRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+// ManageServer_ServiceDesc descriptor for server.RegisterService
+var ManageServer_ServiceDesc = server.ServiceDesc{
+	ServiceName: "trpc.MovieService.operation.Manage",
+	HandlerType: ((*ManageService)(nil)),
+	Methods: []server.Method{
+		{
+			Name: "/trpc.MovieService.operation.Manage/AddInfo",
+			Func: ManageService_AddInfo_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Manage/UpdateInfo",
+			Func: ManageService_UpdateInfo_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Manage/UpdateInfoStatus",
+			Func: ManageService_UpdateInfoStatus_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Manage/DelInfo",
+			Func: ManageService_DelInfo_Handler,
+		},
+	},
+}
+
+// RegisterManageService register service
+func RegisterManageService(s server.Service, svr ManageService) {
+	if err := s.Register(&ManageServer_ServiceDesc, svr); err != nil {
+		panic(fmt.Sprintf("Manage register error:%v", err))
+	}
+
+}
+
 /* ************************************ Client Definition ************************************ */
 
 // UserClientProxy defines service client proxy
@@ -614,6 +742,135 @@ func (c *InfoClientProxyImpl) DelRecord(ctx context.Context, req *RecordReq, opt
 	callopts = append(callopts, opts...)
 
 	rsp := &RecordRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+// ManageClientProxy defines service client proxy
+type ManageClientProxy interface {
+
+	// AddInfo 增加视频
+	AddInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
+
+	// UpdateInfo 修改视频
+	UpdateInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
+
+	// UpdateInfoStatus 修改视频状态
+	UpdateInfoStatus(ctx context.Context, req *UpdateInfoStatusReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
+
+	// DelInfo 删除视频
+	DelInfo(ctx context.Context, req *DelInfoReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
+}
+
+type ManageClientProxyImpl struct {
+	client client.Client
+	opts   []client.Option
+}
+
+var NewManageClientProxy = func(opts ...client.Option) ManageClientProxy {
+	return &ManageClientProxyImpl{client: client.DefaultClient, opts: opts}
+}
+
+func (c *ManageClientProxyImpl) AddInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Manage/AddInfo")
+	msg.WithCalleeServiceName(ManageServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Manage")
+	msg.WithCalleeMethod("AddInfo")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &ManageInfoRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *ManageClientProxyImpl) UpdateInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Manage/UpdateInfo")
+	msg.WithCalleeServiceName(ManageServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Manage")
+	msg.WithCalleeMethod("UpdateInfo")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &ManageInfoRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *ManageClientProxyImpl) UpdateInfoStatus(ctx context.Context, req *UpdateInfoStatusReq, opts ...client.Option) (*ManageInfoRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Manage/UpdateInfoStatus")
+	msg.WithCalleeServiceName(ManageServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Manage")
+	msg.WithCalleeMethod("UpdateInfoStatus")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &ManageInfoRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *ManageClientProxyImpl) DelInfo(ctx context.Context, req *DelInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Manage/DelInfo")
+	msg.WithCalleeServiceName(ManageServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Manage")
+	msg.WithCalleeMethod("DelInfo")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &ManageInfoRsp{}
 
 	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
 		return nil, err

@@ -119,7 +119,7 @@ func (s *UserImpl) Login(ctx context.Context, req *pb.LoginReq, rsp *pb.LoginRsp
 		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
 		rsp.Result = &pb.LoginRsp_Result{
 			Token:     token,
-			LoginTime: uint64(time.Now().Unix()),
+			LoginTime: time.Now().Format("2006-01-02 15:04:05"),
 		}
 	} else { // 密码错误
 		rsp.Code, rsp.Msg = config.ClientLoginError.Code, config.ClientLoginError.Msg
