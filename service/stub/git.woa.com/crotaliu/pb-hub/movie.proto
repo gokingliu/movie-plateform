@@ -40,9 +40,9 @@ service Info {
 // 视频管理
 service Manage {
   // 增加视频
-  rpc AddInfo(ManageInfoReq) returns (ManageInfoRsp) {}
+  rpc AddInfo(AddInfoReq) returns (ManageInfoRsp) {}
   // 修改视频
-  rpc UpdateInfo(ManageInfoReq) returns (ManageInfoRsp) {}
+  rpc UpdateInfo(UpdateInfoReq) returns (ManageInfoRsp) {}
   // 修改视频状态
   rpc UpdateInfoStatus(UpdateInfoStatusReq) returns (ManageInfoRsp) {}
   // 删除视频
@@ -96,8 +96,8 @@ message RecordReq {
   uint32 mType   = 2; // 记录类型
 }
 
-// 增加/更新视频 请求参数
-message ManageInfoReq {
+// 增加视频 请求参数
+message AddInfoReq {
   message List {
     string mUrl          = 1; // 电影 URL
     string mName         = 2; // 电影名
@@ -118,14 +118,31 @@ message ManageInfoReq {
   repeated List list     = 1; // 批量添加/更新视频
 }
 
+// 更新视频 请求参数
+message UpdateInfoReq {
+  message Info {
+    uint32 mTypeID       = 1; // 电影类型 ID
+    string mTypeName     = 2; // 电影类型
+    float  mDouBanScore  = 3; // 豆瓣评分
+    uint32 mCountryID    = 4; // 电影制片国家/地区 ID
+    string mCountryName  = 5; // 电影制片国家/地区
+    uint32 mLanguageID   = 6; // 电影语言
+    string mLanguageName = 7; // 电影语言
+    uint32 mDateYear     = 8; // 电影上映年份
+  }
+  Info info              = 1; // 更新信息
+  repeated uint32 mids   = 2; // 视频 ID
+}
+
 // 修改视频状态 请求参数
 message UpdateInfoStatusReq {
-  uint32 mStatus = 1; // 状态，1-上线 2-下线
+  repeated uint32 mids    = 1; // 视频 ID
+  uint32          mStatus = 2; // 状态，1-上线 2-下线
 }
 
 // 删除视频 请求参数
 message DelInfoReq {
-  uint32 mid     = 1; // 视频 ID
+  repeated uint32 mids    = 1; // 视频 ID
 }
 
 /* ************************************ 响应参数 ************************************ */
@@ -228,5 +245,5 @@ message RecordRsp {
 message ManageInfoRsp {
   int32           code   = 1; // 返回码
   string          msg    = 2; // 返回信息
-  bool            result = 3; // 返回结果
+  uint32          result = 3; // 返回生效条数结果
 }

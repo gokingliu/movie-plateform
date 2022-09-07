@@ -64,7 +64,7 @@ func WriteTokenLogic(db *gorm.DB, userName, token string) error {
 }
 
 // PreHandleTokenLogic 检查 http 带来的 token 是否在数据库中
-func PreHandleTokenLogic(db *gorm.DB, ctx context.Context) (bool, string, uint32, error) {
+func PreHandleTokenLogic(db *gorm.DB, ctx context.Context) (bool, string, int64, error) {
 	// 获取请求头中的 token
 	httpToken, getTokenErr := utils.GetToken(ctx)
 	if getTokenErr != nil {
@@ -82,7 +82,7 @@ func PreHandleTokenLogic(db *gorm.DB, ctx context.Context) (bool, string, uint32
 		Where("userName = ?", userName).
 		Take(&token)
 	// 获取 user 数据表中该 userName 对应的 role
-	var role uint32
+	var role int64
 	roleDBResult := db.Debug().Model(&models.User{}).
 		Select("role").
 		Where("userName = ?", userName).

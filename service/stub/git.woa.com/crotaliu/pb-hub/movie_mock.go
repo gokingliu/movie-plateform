@@ -230,7 +230,7 @@ func (m *MockManageService) EXPECT() *MockManageServiceMockRecorder {
 }
 
 // AddInfo mocks base method
-func (m *MockManageService) AddInfo(ctx context.Context, req *ManageInfoReq, rsp *ManageInfoRsp) error {
+func (m *MockManageService) AddInfo(ctx context.Context, req *AddInfoReq, rsp *ManageInfoRsp) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddInfo", ctx, req, rsp)
 	ret0, _ := ret[0].(error)
@@ -244,7 +244,7 @@ func (mr *MockManageServiceMockRecorder) AddInfo(ctx, req, rsp interface{}) *gom
 }
 
 // UpdateInfo mocks base method
-func (m *MockManageService) UpdateInfo(ctx context.Context, req *ManageInfoReq, rsp *ManageInfoRsp) error {
+func (m *MockManageService) UpdateInfo(ctx context.Context, req *UpdateInfoReq, rsp *ManageInfoRsp) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateInfo", ctx, req, rsp)
 	ret0, _ := ret[0].(error)
@@ -558,7 +558,7 @@ func (m *MockManageClientProxy) EXPECT() *MockManageClientProxyMockRecorder {
 }
 
 // AddInfo mocks base method
-func (m *MockManageClientProxy) AddInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+func (m *MockManageClientProxy) AddInfo(ctx context.Context, req *AddInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, req}
 	for _, a := range opts {
@@ -578,7 +578,7 @@ func (mr *MockManageClientProxyMockRecorder) AddInfo(ctx, req interface{}, opts 
 }
 
 // UpdateInfo mocks base method
-func (m *MockManageClientProxy) UpdateInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+func (m *MockManageClientProxy) UpdateInfo(ctx context.Context, req *UpdateInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, req}
 	for _, a := range opts {

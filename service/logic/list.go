@@ -11,13 +11,13 @@ import (
 )
 
 // GetListLogic 获取电影列表
-func GetListLogic(db *gorm.DB, data map[string]interface{}, role uint32, pageNo, pageSize uint32) ([]models.ListInfo, uint32, error) {
+func GetListLogic(db *gorm.DB, data map[string]interface{}, role int64, pageNo, pageSize uint32) ([]models.ListInfo, uint32, error) {
 	var ListInfo []models.ListInfo
 	var count int64
 	// 获取 WHERE 条件
 	whereSQL := utils.SpliceWhereSql(data)
 	// 不同角色 WHERE 条件不同
-	if role != uint32(3) {
+	if role != 3 {
 		if whereSQL == "" {
 			whereSQL += fmt.Sprintf(" mStatus = %d", 1)
 		} else {

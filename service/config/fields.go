@@ -16,3 +16,8 @@ var InfoFields = []string{
 	"mid", "mUrl", "mName", "mPoster", "mTypeName", "mDouBanScore", "mDirector", "mStarring", "mCountryName",
 	"mLanguageName", "mDate", "mDesc",
 }
+
+// UpdateInfoFields 修改视频详情字段
+var UpdateInfoFields = []string{
+	"mTypeID", "mTypeName", "mDouBanScore", "mCountryID", "mCountryName", "mLanguageID", "mLanguageName", "mDateYear",
+}

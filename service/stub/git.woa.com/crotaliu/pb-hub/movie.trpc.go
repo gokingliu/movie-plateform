@@ -324,10 +324,10 @@ func RegisterInfoService(s server.Service, svr InfoService) {
 type ManageService interface {
 
 	// AddInfo 增加视频
-	AddInfo(ctx context.Context, req *ManageInfoReq, rsp *ManageInfoRsp) (err error)
+	AddInfo(ctx context.Context, req *AddInfoReq, rsp *ManageInfoRsp) (err error)
 
 	// UpdateInfo 修改视频
-	UpdateInfo(ctx context.Context, req *ManageInfoReq, rsp *ManageInfoRsp) (err error)
+	UpdateInfo(ctx context.Context, req *UpdateInfoReq, rsp *ManageInfoRsp) (err error)
 
 	// UpdateInfoStatus 修改视频状态
 	UpdateInfoStatus(ctx context.Context, req *UpdateInfoStatusReq, rsp *ManageInfoRsp) (err error)
@@ -338,13 +338,13 @@ type ManageService interface {
 
 func ManageService_AddInfo_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
 
-	req := &ManageInfoReq{}
+	req := &AddInfoReq{}
 	filters, err := f(req)
 	if err != nil {
 		return nil, err
 	}
 	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
-		return svr.(ManageService).AddInfo(ctx, reqbody.(*ManageInfoReq), rspbody.(*ManageInfoRsp))
+		return svr.(ManageService).AddInfo(ctx, reqbody.(*AddInfoReq), rspbody.(*ManageInfoRsp))
 	}
 
 	rsp := &ManageInfoRsp{}
@@ -358,13 +358,13 @@ func ManageService_AddInfo_Handler(svr interface{}, ctx context.Context, f serve
 
 func ManageService_UpdateInfo_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
 
-	req := &ManageInfoReq{}
+	req := &UpdateInfoReq{}
 	filters, err := f(req)
 	if err != nil {
 		return nil, err
 	}
 	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
-		return svr.(ManageService).UpdateInfo(ctx, reqbody.(*ManageInfoReq), rspbody.(*ManageInfoRsp))
+		return svr.(ManageService).UpdateInfo(ctx, reqbody.(*UpdateInfoReq), rspbody.(*ManageInfoRsp))
 	}
 
 	rsp := &ManageInfoRsp{}
@@ -754,10 +754,10 @@ func (c *InfoClientProxyImpl) DelRecord(ctx context.Context, req *RecordReq, opt
 type ManageClientProxy interface {
 
 	// AddInfo 增加视频
-	AddInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
+	AddInfo(ctx context.Context, req *AddInfoReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
 
 	// UpdateInfo 修改视频
-	UpdateInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
+	UpdateInfo(ctx context.Context, req *UpdateInfoReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
 
 	// UpdateInfoStatus 修改视频状态
 	UpdateInfoStatus(ctx context.Context, req *UpdateInfoStatusReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
@@ -775,7 +775,7 @@ var NewManageClientProxy = func(opts ...client.Option) ManageClientProxy {
 	return &ManageClientProxyImpl{client: client.DefaultClient, opts: opts}
 }
 
-func (c *ManageClientProxyImpl) AddInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+func (c *ManageClientProxyImpl) AddInfo(ctx context.Context, req *AddInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
 
 	ctx, msg := codec.WithCloneMessage(ctx)
 	defer codec.PutBackMessage(msg)
@@ -801,7 +801,7 @@ func (c *ManageClientProxyImpl) AddInfo(ctx context.Context, req *ManageInfoReq,
 	return rsp, nil
 }
 
-func (c *ManageClientProxyImpl) UpdateInfo(ctx context.Context, req *ManageInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
+func (c *ManageClientProxyImpl) UpdateInfo(ctx context.Context, req *UpdateInfoReq, opts ...client.Option) (*ManageInfoRsp, error) {
 
 	ctx, msg := codec.WithCloneMessage(ctx)
 	defer codec.PutBackMessage(msg)
