@@ -12,6 +12,7 @@ import (
 
 // GetListLogic 获取电影列表
 func GetListLogic(db *gorm.DB, data map[string]interface{}, role int64, pageNo, pageSize uint32) ([]models.ListInfo, uint32, error) {
+	// todo
 	var ListInfo []models.ListInfo
 	var count int64
 	// 获取 WHERE 条件
@@ -24,16 +25,14 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role int64, pageNo, 
 			whereSQL += fmt.Sprintf(" AND mStatus = %d", 1)
 		}
 	}
-	// SELECT 字段
-	selectSQL := config.ListFields
 	// 分页列表
 	dbResult := db.Debug().Raw(
-		"SELECT "+strings.Join(selectSQL, ",")+" FROM list AS baseTable "+
-			"LEFT JOIN (SELECT mid, COUNT(*) AS mViews FROM record WHERE type = 3 GROUP BY mid) AS viewTable "+
+		"SELECT "+strings.Join(config.ListFields, ",")+" FROM list AS baseTable "+
+			"LEFT JOIN (SELECT mid, COUNT(*) AS mViews FROM record WHERE mType = 3 GROUP BY mid) AS viewTable "+
 			"ON baseTable.mid = viewTable.mid "+
-			"LEFT JOIN (SELECT mid, COUNT(*) AS mLikes FROM record WHERE type = 1 GROUP BY mid) AS likeTable "+
+			"LEFT JOIN (SELECT mid, COUNT(*) AS mLikes FROM record WHERE mType = 1 GROUP BY mid) AS likeTable "+
 			"ON baseTable.mid = likeTable.mid "+
-			"LEFT JOIN (SELECT mid, COUNT(*) AS mCollects FROM record WHERE type = 2 GROUP BY mid) AS collectTable "+
+			"LEFT JOIN (SELECT mid, COUNT(*) AS mCollects FROM record WHERE mType = 2 GROUP BY mid) AS collectTable "+
 			"ON baseTable.mid = collectTable.mid "+
 			"WHERE baseTable.mid >= (SELECT mid FROM list WHERE "+whereSQL+" LIMIT ?,1) LIMIT ?",
 		(pageNo-1)*pageSize, pageSize,
@@ -52,13 +51,11 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role int64, pageNo, 
 // GetLeaderboardLogic 获取视频排行榜
 func GetLeaderboardLogic(db *gorm.DB, mType uint32) ([]*pb.GetLeaderboardRsp_List, error) {
 	var list []*pb.GetLeaderboardRsp_List
-	// SELECT 字段
-	selectSQL := config.LeaderboardFields
 	// 查询列表
 	dbResult := db.Debug().Raw(
-		"SELECT "+strings.Join(selectSQL, ",")+" FROM list AS baseTable "+
+		"SELECT "+strings.Join(config.LeaderboardFields, ",")+" FROM list AS baseTable "+
 			"RIGHT JOIN "+
-			"(SELECT mid, COUNT(*) AS mTotal FROM record WHERE type = ? GROUP BY mid ORDER BY mTotal DESC LIMIT 5) "+
+			"(SELECT mid, COUNT(*) AS mTotal FROM record WHERE mType = ? GROUP BY mid ORDER BY mTotal DESC LIMIT 5) "+
 			"AS totalTable ON baseTable.mid = totalTable.mid WHERE mStatus = 1", mType,
 	).Scan(&list)
 

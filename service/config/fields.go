@@ -21,3 +21,6 @@ var InfoFields = []string{
 var UpdateInfoFields = []string{
 	"mTypeID", "mTypeName", "mDouBanScore", "mCountryID", "mCountryName", "mLanguageID", "mLanguageName", "mDateYear",
 }
+
+// PropFields 属性字段
+var PropFields = []string{"label", "value"}

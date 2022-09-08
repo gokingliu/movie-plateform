@@ -47,6 +47,14 @@ service Manage {
   rpc UpdateInfoStatus(UpdateInfoStatusReq) returns (ManageInfoRsp) {}
   // 删除视频
   rpc DelInfo(DelInfoReq) returns (ManageInfoRsp) {}
+  // 添加属性
+  rpc AddProp(AddPropReq) returns (ManagePropRsp) {}
+  // 获取属性
+  rpc GetProp(GetPropReq) returns (GetPropRsp) {}
+  // 更新属性
+  rpc UpdateProp(UpdatePropReq) returns (ManagePropRsp) {}
+  // 删除属性
+  rpc DelProp(DelPropReq) returns (ManagePropRsp) {}
 }
 
 /* ************************************ 请求参数 ************************************ */
@@ -143,6 +151,36 @@ message UpdateInfoStatusReq {
 // 删除视频 请求参数
 message DelInfoReq {
   repeated uint32 mids    = 1; // 视频 ID
+}
+
+// 添加属性 请求参数
+message AddPropReq {
+  message Prop {
+    string label      = 1; // 属性名
+    uint32 value      = 2; // 属性值
+    uint32 mType      = 3; // 类型
+  }
+  repeated Prop props = 1; // 属性切片
+}
+
+// 获取属性 请求参数
+message GetPropReq {
+  uint32 mType        = 1; // 类型
+}
+
+// 更新属性 请求参数
+message UpdatePropReq {
+  message Prop {
+    uint32 id         = 1; // 属性名
+    string label      = 2; // 属性名
+    uint32 value      = 3; // 属性值
+  }
+  repeated Prop props = 1; // 属性切片
+}
+
+// 删除属性 请求参数
+message DelPropReq {
+  repeated uint32 ids = 1; // 属性 ID
 }
 
 /* ************************************ 响应参数 ************************************ */
@@ -245,5 +283,23 @@ message RecordRsp {
 message ManageInfoRsp {
   int32           code   = 1; // 返回码
   string          msg    = 2; // 返回信息
-  uint32          result = 3; // 返回生效条数结果
+  int64           result = 3; // 返回生效条数结果
+}
+
+// 属性管理 响应参数
+message ManagePropRsp {
+  int32           code   = 1; // 返回码
+  string          msg    = 2; // 返回信息
+  int64           result = 3; // 返回生效条数结果
+}
+
+// 获取属性 响应参数
+message GetPropRsp {
+  message Result {
+    string label         = 1; // 属性名
+    uint32 value         = 2; // 属性值
+  }
+  int32           code   = 1; // 返回码
+  string          msg    = 2; // 返回信息
+  repeated Result result = 3; // 返回结果
 }

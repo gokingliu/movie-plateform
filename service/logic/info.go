@@ -22,7 +22,7 @@ func GetRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) (boo
 	var selectMid uint32
 	// 查询列表
 	midResult := db.Debug().Model(&models.Record{}).Select("mid").
-		Where("userName = ? AND mid = ? AND type = ? ", userName, mid, mType).Take(&selectMid)
+		Where("userName = ? AND mid = ? AND mType = ? ", userName, mid, mType).Take(&selectMid)
 
 	return selectMid >= 1, midResult.Error
 }
@@ -32,7 +32,7 @@ func PostRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) err
 	dbResult := db.Debug().Model(&models.Record{}).Create(map[string]interface{}{
 		"userName": userName,
 		"mid":      mid,
-		"type":     mType,
+		"mType":    mType,
 	})
 
 	return dbResult.Error
@@ -41,7 +41,7 @@ func PostRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) err
 // DelRecordLogic 删除记录
 func DelRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) error {
 	dbResult := db.Debug().
-		Where("userName = ? AND mid = ? AND type = ?", userName, mid, mType).Delete(&models.Record{})
+		Where("userName = ? AND mid = ? AND mType = ?", userName, mid, mType).Delete(&models.Record{})
 
 	return dbResult.Error
 }

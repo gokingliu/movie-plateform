@@ -179,13 +179,13 @@ SELECT
     collectTable.mCollects
 FROM list AS baseTable
 
-LEFT JOIN (SELECT mid, COUNT(*) AS mViews FROM record WHERE type = 3 GROUP BY mid) AS viewTable
+LEFT JOIN (SELECT mid, COUNT(*) AS mViews FROM record WHERE mType = 3 GROUP BY mid) AS viewTable
 ON baseTable.mid = viewTable.mid
 
-LEFT JOIN (SELECT mid, COUNT(*) AS mLikes FROM record WHERE type = 1 GROUP BY mid) AS likeTable
+LEFT JOIN (SELECT mid, COUNT(*) AS mLikes FROM record WHERE mType = 1 GROUP BY mid) AS likeTable
 ON baseTable.mid = likeTable.mid
 
-LEFT JOIN (SELECT mid, COUNT(*) AS mCollects FROM record WHERE type = 2 GROUP BY mid) AS collectTable
+LEFT JOIN (SELECT mid, COUNT(*) AS mCollects FROM record WHERE mType = 2 GROUP BY mid) AS collectTable
 ON baseTable.mid = collectTable.mid
 
 WHERE baseTable.mid >= (SELECT mid FROM list WHERE mStatus = 1 AND mTypeID = 1 LIMIT (pageNo - 1) * pageSize,1)
@@ -222,14 +222,14 @@ FROM list WHERE mid = 1;
 创建点赞/收藏/播放表
 ```sql
 CREATE TABLE `record` (
-`userName` varchar(10) NOT NULL COMMENT '用户名',
+`userName` varchar(32) NOT NULL COMMENT '用户名',
 `mid` int(10) NOT NULL COMMENT '电影ID',
-`type` tinyint(4) unsigned NOT NULL COMMENT '点赞/收藏/播放',
+`mType` tinyint(4) unsigned NOT NULL COMMENT '点赞/收藏/播放',
 `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-UNIQUE KEY `userName_mid_type` (`userName`, `mid`, `type`)
+UNIQUE KEY `userName_mid_mType` (`userName`, `mid`, `mType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
-type: 1-点赞 2-收藏 3-播放
+mType: 1-点赞 2-收藏 3-播放
 
 #### 播放榜
 
@@ -240,7 +240,7 @@ SELECT
     totalTable.mTotal,
 FROM list AS baseTable
 
-RIGHT JOIN (SELECT mid, COUNT(*) AS mTotal FROM record WHERE type = 3 GROUP BY mid ORDER BY mTotal DESC LIMIT 5) AS totalTable
+RIGHT JOIN (SELECT mid, COUNT(*) AS mTotal FROM record WHERE mType = 3 GROUP BY mid ORDER BY mTotal DESC LIMIT 5) AS totalTable
 ON baseTable.mid = totalTable.mid
 WHERE mStatus = 1
 ```
@@ -254,7 +254,7 @@ SELECT
     totalTable.mTotal,
 FROM list AS baseTable
 
-RIGHT JOIN (SELECT mid, COUNT(*) AS mTotal FROM record WHERE type = 2 GROUP BY mid ORDER BY mTotal DESC LIMIT 5) AS totalTable
+RIGHT JOIN (SELECT mid, COUNT(*) AS mTotal FROM record WHERE mType = 2 GROUP BY mid ORDER BY mTotal DESC LIMIT 5) AS totalTable
 ON baseTable.mid = totalTable.mid
 WHERE mStatus = 1
 ```
@@ -268,7 +268,7 @@ SELECT
     totalTable.mTotal,
 FROM list AS baseTable
 
-RIGHT JOIN (SELECT mid, COUNT(*) AS mTotal FROM record WHERE type = 1 GROUP BY mid ORDER BY mTotal DESC LIMIT 5) AS totalTable
+RIGHT JOIN (SELECT mid, COUNT(*) AS mTotal FROM record WHERE mType = 1 GROUP BY mid ORDER BY mTotal DESC LIMIT 5) AS totalTable
 ON baseTable.mid = totalTable.mid
 WHERE mStatus = 1
 ```
@@ -277,14 +277,14 @@ WHERE mStatus = 1
 
 ```sql
 -- 查询
-SELECT mid FROM record WHERE userName='crotaliu' AND mid = 1 AND type = 1;
+SELECT mid FROM record WHERE userName='crotaliu' AND mid = 1 AND mType = 1;
 
 -- 记录
 INSERT INTO record 
 (
     userName,
     mid,
-    type,
+    mType,
     createTime
 )
 VALUES
@@ -295,21 +295,21 @@ VALUES
     1658762844
 );
 -- 取消
-DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND type = 1;
+DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND mType = 1;
 ```
 
 #### 收藏
 
 ```sql
 -- 查询
-SELECT mid FROM record WHERE userName='crotaliu' AND mid = 1 AND type = 2;
+SELECT mid FROM record WHERE userName='crotaliu' AND mid = 1 AND mType = 2;
 
 -- 记录
 INSERT INTO record 
 (
     userName,
     mid,
-    type,
+    mType,
     createTime
 )
 VALUES
@@ -320,21 +320,21 @@ VALUES
     1658762844
 );
 -- 取消
-DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND type = 2;
+DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND mType = 2;
 ```
 
 #### 播放
 
 ```sql
 -- 查询
-SELECT mid FROM record WHERE userName='crotaliu' AND mid = 1 AND type = 1;
+SELECT mid FROM record WHERE userName='crotaliu' AND mid = 1 AND mType = 1;
 
 -- 记录
 INSERT INTO record 
 (
     userName,
     mid,
-    type,
+    mType,
     createTime
 )
 VALUES
@@ -345,7 +345,7 @@ VALUES
     1658762844
 );
 -- 取消
-DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND type = 3;
+DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND mType = 3;
 ```
 
 ## 管理端
@@ -426,13 +426,15 @@ DELETE FROM list WHERE mid=1;
 CREATE TABLE `prop` (
 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '属性ID',
 `label` varchar(10) NOT NULL COMMENT '属性名',
-`value` int(10) NOT NULL COMMENT '属性值',
+`value` tinyint(4) unsigned NOT NULL COMMENT '属性值',
+`mType` tinyint(4) unsigned NOT NULL COMMENT '类型 1-类型 2-制片国家/地区 3-语言 4-上映日期',
 `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-`updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间'
+`updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
 PRIMARY KEY (`id`),
-KEY `index_value` (`value`),
+KEY `index_mType` (`mType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
+mType: 1-类型 2-制片国家/地区 3-语言 4-上映日期
 
 ### 属性添加
 
@@ -441,31 +443,36 @@ INSERT INTO prop
 (
     label,
     value,
-    createTime,
-    updateTime
+    mType,
 )
 VALUES
 (
     '喜剧',
     1,
-    1658762844,
-    1658762844
+    1,
 );
 ```
 
 ### 属性更新
 
 ```sql
-UPDATE prop
-SET
-label='科幻',
-value=2,
-updateTime=1658762844
-WHERE id=1;
+INSERT INTO prop
+(id, label, value)
+VALUES
+(1, "喜剧",  1), (2, "科幻", 2)
+ON DUPLICATE KEY UPDATE
+label = IF (VALUES(label) > "", VALUES(label),  label),
+value = IF (VALUES(value) > 0, VALUES(value), value);
 ```
 
 ### 属性删除
 
 ```sql
 DELETE FROM prop WHERE id=1;
+```
+
+### 属性获取
+
+```sql
+SELECT label, value FROM prop WHERE mType=1;
 ```

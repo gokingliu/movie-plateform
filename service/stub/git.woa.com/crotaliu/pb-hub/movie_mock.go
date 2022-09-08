@@ -285,6 +285,62 @@ func (mr *MockManageServiceMockRecorder) DelInfo(ctx, req, rsp interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelInfo", reflect.TypeOf((*MockManageService)(nil).DelInfo), ctx, req, rsp)
 }
 
+// AddProp mocks base method
+func (m *MockManageService) AddProp(ctx context.Context, req *AddPropReq, rsp *ManagePropRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddProp", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddProp indicates an expected call of AddProp
+func (mr *MockManageServiceMockRecorder) AddProp(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddProp", reflect.TypeOf((*MockManageService)(nil).AddProp), ctx, req, rsp)
+}
+
+// GetProp mocks base method
+func (m *MockManageService) GetProp(ctx context.Context, req *GetPropReq, rsp *GetPropRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetProp", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetProp indicates an expected call of GetProp
+func (mr *MockManageServiceMockRecorder) GetProp(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProp", reflect.TypeOf((*MockManageService)(nil).GetProp), ctx, req, rsp)
+}
+
+// UpdateProp mocks base method
+func (m *MockManageService) UpdateProp(ctx context.Context, req *UpdatePropReq, rsp *ManagePropRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateProp", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateProp indicates an expected call of UpdateProp
+func (mr *MockManageServiceMockRecorder) UpdateProp(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProp", reflect.TypeOf((*MockManageService)(nil).UpdateProp), ctx, req, rsp)
+}
+
+// DelProp mocks base method
+func (m *MockManageService) DelProp(ctx context.Context, req *DelPropReq, rsp *ManagePropRsp) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DelProp", ctx, req, rsp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DelProp indicates an expected call of DelProp
+func (mr *MockManageServiceMockRecorder) DelProp(ctx, req, rsp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelProp", reflect.TypeOf((*MockManageService)(nil).DelProp), ctx, req, rsp)
+}
+
 // MockUserClientProxy is a mock of UserClientProxy interface
 type MockUserClientProxy struct {
 	ctrl     *gomock.Controller
@@ -635,4 +691,84 @@ func (mr *MockManageClientProxyMockRecorder) DelInfo(ctx, req interface{}, opts 
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, req}, opts...)
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelInfo", reflect.TypeOf((*MockManageClientProxy)(nil).DelInfo), varargs...)
+}
+
+// AddProp mocks base method
+func (m *MockManageClientProxy) AddProp(ctx context.Context, req *AddPropReq, opts ...client.Option) (*ManagePropRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "AddProp", varargs...)
+	ret0, _ := ret[0].(*ManagePropRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AddProp indicates an expected call of AddProp
+func (mr *MockManageClientProxyMockRecorder) AddProp(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddProp", reflect.TypeOf((*MockManageClientProxy)(nil).AddProp), varargs...)
+}
+
+// GetProp mocks base method
+func (m *MockManageClientProxy) GetProp(ctx context.Context, req *GetPropReq, opts ...client.Option) (*GetPropRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetProp", varargs...)
+	ret0, _ := ret[0].(*GetPropRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetProp indicates an expected call of GetProp
+func (mr *MockManageClientProxyMockRecorder) GetProp(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetProp", reflect.TypeOf((*MockManageClientProxy)(nil).GetProp), varargs...)
+}
+
+// UpdateProp mocks base method
+func (m *MockManageClientProxy) UpdateProp(ctx context.Context, req *UpdatePropReq, opts ...client.Option) (*ManagePropRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "UpdateProp", varargs...)
+	ret0, _ := ret[0].(*ManagePropRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateProp indicates an expected call of UpdateProp
+func (mr *MockManageClientProxyMockRecorder) UpdateProp(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateProp", reflect.TypeOf((*MockManageClientProxy)(nil).UpdateProp), varargs...)
+}
+
+// DelProp mocks base method
+func (m *MockManageClientProxy) DelProp(ctx context.Context, req *DelPropReq, opts ...client.Option) (*ManagePropRsp, error) {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx, req}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "DelProp", varargs...)
+	ret0, _ := ret[0].(*ManagePropRsp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DelProp indicates an expected call of DelProp
+func (mr *MockManageClientProxyMockRecorder) DelProp(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx, req}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelProp", reflect.TypeOf((*MockManageClientProxy)(nil).DelProp), varargs...)
 }

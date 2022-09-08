@@ -334,6 +334,18 @@ type ManageService interface {
 
 	// DelInfo 删除视频
 	DelInfo(ctx context.Context, req *DelInfoReq, rsp *ManageInfoRsp) (err error)
+
+	// AddProp 添加属性
+	AddProp(ctx context.Context, req *AddPropReq, rsp *ManagePropRsp) (err error)
+
+	// GetProp 获取属性
+	GetProp(ctx context.Context, req *GetPropReq, rsp *GetPropRsp) (err error)
+
+	// UpdateProp 更新属性
+	UpdateProp(ctx context.Context, req *UpdatePropReq, rsp *ManagePropRsp) (err error)
+
+	// DelProp 删除属性
+	DelProp(ctx context.Context, req *DelPropReq, rsp *ManagePropRsp) (err error)
 }
 
 func ManageService_AddInfo_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
@@ -416,6 +428,86 @@ func ManageService_DelInfo_Handler(svr interface{}, ctx context.Context, f serve
 	return rsp, nil
 }
 
+func ManageService_AddProp_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &AddPropReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(ManageService).AddProp(ctx, reqbody.(*AddPropReq), rspbody.(*ManagePropRsp))
+	}
+
+	rsp := &ManagePropRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func ManageService_GetProp_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &GetPropReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(ManageService).GetProp(ctx, reqbody.(*GetPropReq), rspbody.(*GetPropRsp))
+	}
+
+	rsp := &GetPropRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func ManageService_UpdateProp_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &UpdatePropReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(ManageService).UpdateProp(ctx, reqbody.(*UpdatePropReq), rspbody.(*ManagePropRsp))
+	}
+
+	rsp := &ManagePropRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func ManageService_DelProp_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+
+	req := &DelPropReq{}
+	filters, err := f(req)
+	if err != nil {
+		return nil, err
+	}
+	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
+		return svr.(ManageService).DelProp(ctx, reqbody.(*DelPropReq), rspbody.(*ManagePropRsp))
+	}
+
+	rsp := &ManagePropRsp{}
+	err = filters.Handle(ctx, req, rsp, handleFunc)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
 // ManageServer_ServiceDesc descriptor for server.RegisterService
 var ManageServer_ServiceDesc = server.ServiceDesc{
 	ServiceName: "trpc.MovieService.operation.Manage",
@@ -436,6 +528,22 @@ var ManageServer_ServiceDesc = server.ServiceDesc{
 		{
 			Name: "/trpc.MovieService.operation.Manage/DelInfo",
 			Func: ManageService_DelInfo_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Manage/AddProp",
+			Func: ManageService_AddProp_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Manage/GetProp",
+			Func: ManageService_GetProp_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Manage/UpdateProp",
+			Func: ManageService_UpdateProp_Handler,
+		},
+		{
+			Name: "/trpc.MovieService.operation.Manage/DelProp",
+			Func: ManageService_DelProp_Handler,
 		},
 	},
 }
@@ -764,6 +872,18 @@ type ManageClientProxy interface {
 
 	// DelInfo 删除视频
 	DelInfo(ctx context.Context, req *DelInfoReq, opts ...client.Option) (rsp *ManageInfoRsp, err error)
+
+	// AddProp 添加属性
+	AddProp(ctx context.Context, req *AddPropReq, opts ...client.Option) (rsp *ManagePropRsp, err error)
+
+	// GetProp 获取属性
+	GetProp(ctx context.Context, req *GetPropReq, opts ...client.Option) (rsp *GetPropRsp, err error)
+
+	// UpdateProp 更新属性
+	UpdateProp(ctx context.Context, req *UpdatePropReq, opts ...client.Option) (rsp *ManagePropRsp, err error)
+
+	// DelProp 删除属性
+	DelProp(ctx context.Context, req *DelPropReq, opts ...client.Option) (rsp *ManagePropRsp, err error)
 }
 
 type ManageClientProxyImpl struct {
@@ -871,6 +991,110 @@ func (c *ManageClientProxyImpl) DelInfo(ctx context.Context, req *DelInfoReq, op
 	callopts = append(callopts, opts...)
 
 	rsp := &ManageInfoRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *ManageClientProxyImpl) AddProp(ctx context.Context, req *AddPropReq, opts ...client.Option) (*ManagePropRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Manage/AddProp")
+	msg.WithCalleeServiceName(ManageServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Manage")
+	msg.WithCalleeMethod("AddProp")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &ManagePropRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *ManageClientProxyImpl) GetProp(ctx context.Context, req *GetPropReq, opts ...client.Option) (*GetPropRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Manage/GetProp")
+	msg.WithCalleeServiceName(ManageServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Manage")
+	msg.WithCalleeMethod("GetProp")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &GetPropRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *ManageClientProxyImpl) UpdateProp(ctx context.Context, req *UpdatePropReq, opts ...client.Option) (*ManagePropRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Manage/UpdateProp")
+	msg.WithCalleeServiceName(ManageServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Manage")
+	msg.WithCalleeMethod("UpdateProp")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &ManagePropRsp{}
+
+	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *ManageClientProxyImpl) DelProp(ctx context.Context, req *DelPropReq, opts ...client.Option) (*ManagePropRsp, error) {
+
+	ctx, msg := codec.WithCloneMessage(ctx)
+	defer codec.PutBackMessage(msg)
+
+	msg.WithClientRPCName("/trpc.MovieService.operation.Manage/DelProp")
+	msg.WithCalleeServiceName(ManageServer_ServiceDesc.ServiceName)
+	msg.WithCalleeApp("MovieService")
+	msg.WithCalleeServer("operation")
+	msg.WithCalleeService("Manage")
+	msg.WithCalleeMethod("DelProp")
+	msg.WithSerializationType(codec.SerializationTypePB)
+
+	callopts := make([]client.Option, 0, len(c.opts)+len(opts))
+	callopts = append(callopts, c.opts...)
+	callopts = append(callopts, opts...)
+
+	rsp := &ManagePropRsp{}
 
 	if err := c.client.Invoke(ctx, req, rsp, callopts...); err != nil {
 		return nil, err
