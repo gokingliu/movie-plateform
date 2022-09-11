@@ -18,6 +18,8 @@ type Info struct {
 type Record struct {
 	UserName   string `gorm:"column:userName;type:varchar(32);not null"`                           // 用户名
 	Mid        uint32 `gorm:"column:mid;type:tinyint(4) unsigned;not null"`                        // 电影ID
+	MName      string `gorm:"column:mName;type:varchar(255);not null"`                             // 电影名
 	MType      uint32 `gorm:"column:mType;type:tinyint(4) unsigned;not null"`                      // 类型 1-点赞 2-收藏 3-播放
 	CreateTime string `gorm:"column:createTime;type:timestamp;not null;default:CURRENT_TIMESTAMP"` // 创建时间
+	MTotal     uint32 `gorm:"column:mTotal;type:int(10) unsigned;not null"`                        // 总量
 }

@@ -5,15 +5,13 @@ import (
 	"MovieService/models"
 	"MovieService/utils"
 	"fmt"
-	pb "git.woa.com/crotaliu/pb-hub"
 	"gorm.io/gorm"
 	"strings"
 )
 
 // GetListLogic 获取电影列表
-func GetListLogic(db *gorm.DB, data map[string]interface{}, role int64, pageNo, pageSize uint32) ([]models.ListInfo, uint32, error) {
-	// todo
-	var ListInfo []models.ListInfo
+func GetListLogic(db *gorm.DB, data map[string]interface{}, role int64, pageNo, pageSize uint32) ([]models.List, uint32, error) {
+	var ListInfo []models.List
 	var count int64
 	// 获取 WHERE 条件
 	whereSQL := utils.SpliceWhereSql(data)
@@ -34,7 +32,7 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role int64, pageNo, 
 			"ON baseTable.mid = likeTable.mid "+
 			"LEFT JOIN (SELECT mid, COUNT(*) AS mCollects FROM record WHERE mType = 2 GROUP BY mid) AS collectTable "+
 			"ON baseTable.mid = collectTable.mid "+
-			"WHERE baseTable.mid >= (SELECT mid FROM list WHERE "+whereSQL+" LIMIT ?,1) LIMIT ?",
+			"WHERE "+whereSQL+" LIMIT ?,?",
 		(pageNo-1)*pageSize, pageSize,
 	).Scan(&ListInfo)
 	// 总量
@@ -49,8 +47,8 @@ func GetListLogic(db *gorm.DB, data map[string]interface{}, role int64, pageNo, 
 }
 
 // GetLeaderboardLogic 获取视频排行榜
-func GetLeaderboardLogic(db *gorm.DB, mType uint32) ([]*pb.GetLeaderboardRsp_List, error) {
-	var list []*pb.GetLeaderboardRsp_List
+func GetLeaderboardLogic(db *gorm.DB, mType uint32) ([]models.Record, error) {
+	var list []models.Record
 	// 查询列表
 	dbResult := db.Debug().Raw(
 		"SELECT "+strings.Join(config.LeaderboardFields, ",")+" FROM list AS baseTable "+

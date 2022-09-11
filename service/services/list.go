@@ -73,7 +73,7 @@ func (s *ListImpl) GetLeaderboard(ctx context.Context, req *pb.GetLeaderboardReq
 	// 判断 token，并获取用户名、用户角色
 	tokenBol, _, _, tokenErr := logic.PreHandleTokenLogic(db, ctx)
 	// 查询视频排行榜逻辑
-	result, dbErr := logic.GetLeaderboardLogic(db, req.MType)
+	resultList, dbErr := logic.GetLeaderboardLogic(db, req.MType)
 	if dbErr != nil {
 		rsp.Code, rsp.Msg = config.InnerReadDbError.Code, config.InnerReadDbError.Msg
 		return nil
@@ -85,7 +85,17 @@ func (s *ListImpl) GetLeaderboard(ctx context.Context, req *pb.GetLeaderboardReq
 	} else {
 		rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
 	}
-	rsp.Result = result
+	// TODO 不优雅，后续要优化
+	var listRsp []*pb.GetLeaderboardRsp_List
+	for _, result := range resultList {
+		listRsp = append(listRsp, &pb.GetLeaderboardRsp_List{
+			Mid:    result.Mid,
+			MName:  result.MName,
+			MTotal: result.MTotal,
+		})
+	}
+
+	rsp.Result = listRsp
 
 	return nil
 }

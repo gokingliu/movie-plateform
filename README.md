@@ -188,8 +188,7 @@ ON baseTable.mid = likeTable.mid
 LEFT JOIN (SELECT mid, COUNT(*) AS mCollects FROM record WHERE mType = 2 GROUP BY mid) AS collectTable
 ON baseTable.mid = collectTable.mid
 
-WHERE baseTable.mid >= (SELECT mid FROM list WHERE mStatus = 1 AND mTypeID = 1 LIMIT (pageNo - 1) * pageSize,1)
-LIMIT pageSize;
+WHERE WHERE mStatus = 1 AND mTypeID = 1 LIMIT (pageNo - 1) * pageSize,pageSize;
 ```
 
 #### 计算电影总数
@@ -284,15 +283,13 @@ INSERT INTO record
 (
     userName,
     mid,
-    mType,
-    createTime
+    mType
 )
 VALUES
 (
     'crotaliu',
     1,
-    1,
-    1658762844
+    1
 );
 -- 取消
 DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND mType = 1;
@@ -309,15 +306,13 @@ INSERT INTO record
 (
     userName,
     mid,
-    mType,
-    createTime
+    mType
 )
 VALUES
 (
     'crotaliu',
     1,
-    2,
-    1658762844
+    2
 );
 -- 取消
 DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND mType = 2;
@@ -334,15 +329,13 @@ INSERT INTO record
 (
     userName,
     mid,
-    mType,
-    createTime
+    mType
 )
 VALUES
 (
     'crotaliu',
     1,
-    3,
-    1658762844
+    3
 );
 -- 取消
 DELETE FROM record WHERE userName='crotaliu' AND mid = 1 AND mType = 3;
@@ -457,12 +450,13 @@ VALUES
 
 ```sql
 INSERT INTO prop
-(id, label, value)
+(id, label, value, mType)
 VALUES
-(1, "喜剧",  1), (2, "科幻", 2)
+(3, '冒险', 3, 0), (4, '魔幻', 4, 0)
 ON DUPLICATE KEY UPDATE
 label = IF (VALUES(label) > "", VALUES(label),  label),
-value = IF (VALUES(value) > 0, VALUES(value), value);
+value = IF (VALUES(value) > 0, VALUES(value), value),
+mType = IF (VALUES(mType) > 0, VALUES(mType), mType);
 ```
 
 ### 属性删除

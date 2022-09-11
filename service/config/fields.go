@@ -9,7 +9,7 @@ var ListFields = []string{
 }
 
 // LeaderboardFields 排行榜列表展示字段
-var LeaderboardFields = []string{"baseTable.mid", "baseTable.mName", "totalTable.mTotal"}
+var LeaderboardFields = []string{"totalTable.mid", "baseTable.mName", "totalTable.mTotal"}
 
 // InfoFields 视频详情展示字段
 var InfoFields = []string{

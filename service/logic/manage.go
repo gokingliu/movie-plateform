@@ -12,6 +12,7 @@ import (
 // AddInfoLogic 增加视频逻辑
 func AddInfoLogic(db *gorm.DB, req *pb.AddInfoReq) error {
 	var addInfoSplice = make([]map[string]interface{}, 0)
+	// TODO 不优雅，后续要优化
 	for _, value := range req.List {
 		addInfoSplice = append(addInfoSplice, map[string]interface{}{
 			"mUrl":          value.MUrl,
@@ -38,6 +39,7 @@ func AddInfoLogic(db *gorm.DB, req *pb.AddInfoReq) error {
 
 // UpdateInfoLogic 修改视频逻辑
 func UpdateInfoLogic(db *gorm.DB, req *pb.UpdateInfoReq) (error, int64) {
+	// TODO 不优雅，后续要优化
 	dbResult := db.Debug().Model(&models.List{}).Select(config.UpdateInfoFields).
 		Where("mid IN ?", req.Mids).Updates(map[string]interface{}{
 		"mTypeID":       req.Info.MTypeID,
@@ -71,6 +73,7 @@ func DelInfoLogic(db *gorm.DB, req *pb.DelInfoReq) (error, int64) {
 // AddPropLogic 添加属性逻辑
 func AddPropLogic(db *gorm.DB, req *pb.AddPropReq) error {
 	var addPropSplice = make([]map[string]interface{}, 0)
+	// TODO 不优雅，后续要优化
 	for _, value := range req.Props {
 		addPropSplice = append(addPropSplice, map[string]interface{}{
 			"label": value.Label,
@@ -102,7 +105,7 @@ func UpdatePropLogic(db *gorm.DB, req *pb.UpdatePropReq) (error, int64) {
 		)
 	}
 	dbResult := db.Debug().Exec(
-		"INSERT INTO `prop` " +
+		"INSERT INTO prop " +
 			"(id, label, value, mType) " +
 			"VALUES " + strings.Join(updateValueSplice, ", ") + " " +
 			"ON DUPLICATE KEY UPDATE " +
