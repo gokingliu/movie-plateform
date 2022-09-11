@@ -4,7 +4,7 @@ global:                                           #全局配置
 
 server:                                           #服务端配置
   app: MovieService                               #业务的应用名
-  server: movie_service                                 #进程服务名
+  server: movie_service                           #进程服务名
   bin_path: /usr/local/trpc/bin/                  #二进制可执行文件和框架配置文件所在路径
   conf_path: /usr/local/trpc/conf/                #业务配置文件所在路径
   data_path: /usr/local/trpc/data/                #业务数据文件所在路径
@@ -18,13 +18,24 @@ server:                                           #服务端配置
       network: tcp                                #网络监听类型  tcp udp
       protocol: http                              #应用层协议 trpc http
       timeout: 1000                               #请求最长处理时间 单位 毫秒
-    - name: trpc.MovieService.operation.Movie     #service的路由名称
+    - name: trpc.MovieService.operation.List      #service的路由名称
       ip: 127.0.0.1                               #服务监听ip地址 可使用占位符 ${ip},ip和nic二选一，优先ip
       port: 8000                                  #服务监听端口 可使用占位符 ${port}
       network: tcp                                #网络监听类型  tcp udp
       protocol: http                              #应用层协议 trpc http
       timeout: 1000                               #请求最长处理时间 单位 毫秒
-
+    - name: trpc.MovieService.operation.Info      #service的路由名称
+      ip: 127.0.0.1                               #服务监听ip地址 可使用占位符 ${ip},ip和nic二选一，优先ip
+      port: 8000                                  #服务监听端口 可使用占位符 ${port}
+      network: tcp                                #网络监听类型  tcp udp
+      protocol: http                              #应用层协议 trpc http
+      timeout: 1000                               #请求最长处理时间 单位 毫秒
+    - name: trpc.MovieService.operation.Manage    #service的路由名称
+      ip: 127.0.0.1                               #服务监听ip地址 可使用占位符 ${ip},ip和nic二选一，优先ip
+      port: 8000                                  #服务监听端口 可使用占位符 ${port}
+      network: tcp                                #网络监听类型  tcp udp
+      protocol: http                              #应用层协议 trpc http
+      timeout: 1000                               #请求最长处理时间 单位 毫秒
 
 client:                                           #客户端调用的后端配置
   timeout: 1000                                   #针对所有后端的请求最长处理时间
