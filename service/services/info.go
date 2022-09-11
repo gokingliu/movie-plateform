@@ -76,8 +76,8 @@ func (s *InfoImpl) GetRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.Rec
 	return nil
 }
 
-// PostRecord 添加记录
-func (s *InfoImpl) PostRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.RecordRsp) error {
+// AddRecord 添加记录
+func (s *InfoImpl) AddRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.RecordRsp) error {
 	// ConnDB 实例
 	db := utils.ConnDB()
 	// 判断 token，并获取用户名、用户角色
@@ -89,7 +89,7 @@ func (s *InfoImpl) PostRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.Re
 		return nil
 	}
 	// 添加记录逻辑
-	dbErr := logic.PostRecordLogic(db, userName, req.Mid, req.MType)
+	dbErr := logic.AddRecordLogic(db, userName, req.Mid, req.MType)
 	// 添加 DB 错误
 	if dbErr != nil {
 		rsp.Code, rsp.Msg = config.InnerWriteDbError.Code, config.InnerWriteDbError.Msg
@@ -97,6 +97,7 @@ func (s *InfoImpl) PostRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.Re
 	}
 	// 正常返回
 	rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
+	rsp.Result = true
 
 	return nil
 }
@@ -121,6 +122,7 @@ func (s *InfoImpl) DelRecord(ctx context.Context, req *pb.RecordReq, rsp *pb.Rec
 	}
 	// 正常返回
 	rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
+	rsp.Result = true
 
 	return nil
 }

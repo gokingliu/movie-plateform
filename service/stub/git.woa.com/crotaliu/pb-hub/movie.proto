@@ -32,7 +32,7 @@ service Info {
   // 获取记录
   rpc GetRecord(RecordReq) returns (RecordRsp) {}
   // 增加记录
-  rpc PostRecord(RecordReq) returns (RecordRsp) {}
+  rpc AddRecord(RecordReq) returns (RecordRsp) {}
   // 删除记录
   rpc DelRecord(RecordReq) returns (RecordRsp) {}
 }

@@ -19,16 +19,16 @@ func GetInfoLogic(db *gorm.DB, mid uint32) (models.Info, error) {
 
 // GetRecordLogic 获取记录
 func GetRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) (bool, error) {
-	var selectMid uint32
+	var count int64
 	// 查询列表
 	midResult := db.Debug().Model(&models.Record{}).Select("mid").
-		Where("userName = ? AND mid = ? AND mType = ? ", userName, mid, mType).Take(&selectMid)
+		Where("userName = ? AND mid = ? AND mType = ? ", userName, mid, mType).Count(&count)
 
-	return selectMid >= 1, midResult.Error
+	return count > 0, midResult.Error
 }
 
-// PostRecordLogic 添加记录
-func PostRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) error {
+// AddRecordLogic 添加记录
+func AddRecordLogic(db *gorm.DB, userName string, mid uint32, mType uint32) error {
 	dbResult := db.Debug().Model(&models.Record{}).Create(map[string]interface{}{
 		"userName": userName,
 		"mid":      mid,

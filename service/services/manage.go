@@ -141,7 +141,7 @@ func (s *ManageImpl) AddProp(ctx context.Context, req *pb.AddPropReq, rsp *pb.Ma
 		return nil
 	}
 	// 添加属性逻辑
-	dbErr := logic.AddPropLogic(db, req)
+	dbErr, num := logic.AddPropLogic(db, req)
 	// 修改 DB 错误
 	if dbErr != nil {
 		rsp.Code, rsp.Msg = config.InnerWriteDbError.Code, config.InnerWriteDbError.Msg
@@ -149,6 +149,7 @@ func (s *ManageImpl) AddProp(ctx context.Context, req *pb.AddPropReq, rsp *pb.Ma
 	}
 	// 正常返回
 	rsp.Code, rsp.Msg = config.ResOk.Code, config.ResOk.Msg
+	rsp.Result = num
 
 	return nil
 }

@@ -178,18 +178,18 @@ func (mr *MockInfoServiceMockRecorder) GetRecord(ctx, req, rsp interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRecord", reflect.TypeOf((*MockInfoService)(nil).GetRecord), ctx, req, rsp)
 }
 
-// PostRecord mocks base method
-func (m *MockInfoService) PostRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) error {
+// AddRecord mocks base method
+func (m *MockInfoService) AddRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "PostRecord", ctx, req, rsp)
+	ret := m.ctrl.Call(m, "AddRecord", ctx, req, rsp)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// PostRecord indicates an expected call of PostRecord
-func (mr *MockInfoServiceMockRecorder) PostRecord(ctx, req, rsp interface{}) *gomock.Call {
+// AddRecord indicates an expected call of AddRecord
+func (mr *MockInfoServiceMockRecorder) AddRecord(ctx, req, rsp interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PostRecord", reflect.TypeOf((*MockInfoService)(nil).PostRecord), ctx, req, rsp)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRecord", reflect.TypeOf((*MockInfoService)(nil).AddRecord), ctx, req, rsp)
 }
 
 // DelRecord mocks base method
@@ -550,24 +550,24 @@ func (mr *MockInfoClientProxyMockRecorder) GetRecord(ctx, req interface{}, opts 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRecord", reflect.TypeOf((*MockInfoClientProxy)(nil).GetRecord), varargs...)
 }
 
-// PostRecord mocks base method
-func (m *MockInfoClientProxy) PostRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
+// AddRecord mocks base method
+func (m *MockInfoClientProxy) AddRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
 	m.ctrl.T.Helper()
 	varargs := []interface{}{ctx, req}
 	for _, a := range opts {
 		varargs = append(varargs, a)
 	}
-	ret := m.ctrl.Call(m, "PostRecord", varargs...)
+	ret := m.ctrl.Call(m, "AddRecord", varargs...)
 	ret0, _ := ret[0].(*RecordRsp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// PostRecord indicates an expected call of PostRecord
-func (mr *MockInfoClientProxyMockRecorder) PostRecord(ctx, req interface{}, opts ...interface{}) *gomock.Call {
+// AddRecord indicates an expected call of AddRecord
+func (mr *MockInfoClientProxyMockRecorder) AddRecord(ctx, req interface{}, opts ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	varargs := append([]interface{}{ctx, req}, opts...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PostRecord", reflect.TypeOf((*MockInfoClientProxy)(nil).PostRecord), varargs...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRecord", reflect.TypeOf((*MockInfoClientProxy)(nil).AddRecord), varargs...)
 }
 
 // DelRecord mocks base method

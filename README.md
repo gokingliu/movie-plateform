@@ -67,10 +67,10 @@ SELECT password FROM user WHERE userName='crotaliu';
 CREATE TABLE `token` (
 `token` varchar(255) NOT NULL COMMENT '用户token',
 `userName` varchar(32) NOT NULL COMMENT '用户名',
-`loginTime` int(10) unsigned NOT NULL DEFAULT unix_timestamp(now()) COMMENT '登录时间',
+`loginTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登录时间',
 PRIMARY KEY (`token`),
 UNIQUE KEY `userName` (`userName`),
-KEY `index_loginTime` (`loginTime`),
+KEY `index_loginTime` (`loginTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
@@ -424,6 +424,7 @@ CREATE TABLE `prop` (
 `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
 PRIMARY KEY (`id`),
+UNIQUE KEY `value` (`value`)
 KEY `index_mType` (`mType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```

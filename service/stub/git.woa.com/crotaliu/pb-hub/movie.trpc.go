@@ -201,8 +201,8 @@ type InfoService interface {
 	// GetRecord 获取记录
 	GetRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) (err error)
 
-	// PostRecord 增加记录
-	PostRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) (err error)
+	// AddRecord 增加记录
+	AddRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) (err error)
 
 	// DelRecord 删除记录
 	DelRecord(ctx context.Context, req *RecordReq, rsp *RecordRsp) (err error)
@@ -248,7 +248,7 @@ func InfoService_GetRecord_Handler(svr interface{}, ctx context.Context, f serve
 	return rsp, nil
 }
 
-func InfoService_PostRecord_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
+func InfoService_AddRecord_Handler(svr interface{}, ctx context.Context, f server.FilterFunc) (interface{}, error) {
 
 	req := &RecordReq{}
 	filters, err := f(req)
@@ -256,7 +256,7 @@ func InfoService_PostRecord_Handler(svr interface{}, ctx context.Context, f serv
 		return nil, err
 	}
 	handleFunc := func(ctx context.Context, reqbody interface{}, rspbody interface{}) error {
-		return svr.(InfoService).PostRecord(ctx, reqbody.(*RecordReq), rspbody.(*RecordRsp))
+		return svr.(InfoService).AddRecord(ctx, reqbody.(*RecordReq), rspbody.(*RecordRsp))
 	}
 
 	rsp := &RecordRsp{}
@@ -302,8 +302,8 @@ var InfoServer_ServiceDesc = server.ServiceDesc{
 			Func: InfoService_GetRecord_Handler,
 		},
 		{
-			Name: "/trpc.MovieService.operation.Info/PostRecord",
-			Func: InfoService_PostRecord_Handler,
+			Name: "/trpc.MovieService.operation.Info/AddRecord",
+			Func: InfoService_AddRecord_Handler,
 		},
 		{
 			Name: "/trpc.MovieService.operation.Info/DelRecord",
@@ -738,8 +738,8 @@ type InfoClientProxy interface {
 	// GetRecord 获取记录
 	GetRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (rsp *RecordRsp, err error)
 
-	// PostRecord 增加记录
-	PostRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (rsp *RecordRsp, err error)
+	// AddRecord 增加记录
+	AddRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (rsp *RecordRsp, err error)
 
 	// DelRecord 删除记录
 	DelRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (rsp *RecordRsp, err error)
@@ -806,17 +806,17 @@ func (c *InfoClientProxyImpl) GetRecord(ctx context.Context, req *RecordReq, opt
 	return rsp, nil
 }
 
-func (c *InfoClientProxyImpl) PostRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
+func (c *InfoClientProxyImpl) AddRecord(ctx context.Context, req *RecordReq, opts ...client.Option) (*RecordRsp, error) {
 
 	ctx, msg := codec.WithCloneMessage(ctx)
 	defer codec.PutBackMessage(msg)
 
-	msg.WithClientRPCName("/trpc.MovieService.operation.Info/PostRecord")
+	msg.WithClientRPCName("/trpc.MovieService.operation.Info/AddRecord")
 	msg.WithCalleeServiceName(InfoServer_ServiceDesc.ServiceName)
 	msg.WithCalleeApp("MovieService")
 	msg.WithCalleeServer("operation")
 	msg.WithCalleeService("Info")
-	msg.WithCalleeMethod("PostRecord")
+	msg.WithCalleeMethod("AddRecord")
 	msg.WithSerializationType(codec.SerializationTypePB)
 
 	callopts := make([]client.Option, 0, len(c.opts)+len(opts))

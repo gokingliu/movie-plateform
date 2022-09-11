@@ -71,9 +71,8 @@ func DelInfoLogic(db *gorm.DB, req *pb.DelInfoReq) (error, int64) {
 }
 
 // AddPropLogic 添加属性逻辑
-func AddPropLogic(db *gorm.DB, req *pb.AddPropReq) error {
+func AddPropLogic(db *gorm.DB, req *pb.AddPropReq) (error, int64) {
 	var addPropSplice = make([]map[string]interface{}, 0)
-	// TODO 不优雅，后续要优化
 	for _, value := range req.Props {
 		addPropSplice = append(addPropSplice, map[string]interface{}{
 			"label": value.Label,
@@ -83,7 +82,7 @@ func AddPropLogic(db *gorm.DB, req *pb.AddPropReq) error {
 	}
 	dbResult := db.Debug().Model(&models.Prop{}).Create(&addPropSplice)
 
-	return dbResult.Error
+	return dbResult.Error, dbResult.RowsAffected
 }
 
 // GetPropLogic 获取属性逻辑
