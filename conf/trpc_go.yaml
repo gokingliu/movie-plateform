@@ -43,7 +43,7 @@ client:                                           #客户端调用的后端配�
   filter:                                         #针对所有后端调用函数前后的拦截器列表
   service:                                        #针对单个后端的配置
   - name: trpc.MovieService.operation.basicDB     #后端服务的 service name DB
-    target: dsn://root:test@tcp(127.0.0.1:3306)/movie?charset=utf8mb4&parseTime=True&loc=Local #请求服务地址
+    target: dsn://root:@test@tcp(127.0.0.1:3306)/movie?charset=utf8mb4&parseTime=True&loc=Local #请求服务地址
 
 plugins:                                          #插件配置
   log:                                            #日志配置

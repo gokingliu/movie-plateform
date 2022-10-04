@@ -424,7 +424,7 @@ CREATE TABLE `prop` (
 `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
 `updateTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
 PRIMARY KEY (`id`),
-UNIQUE KEY `value` (`value`)
+UNIQUE KEY `value` (`value`),
 KEY `index_mType` (`mType`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
